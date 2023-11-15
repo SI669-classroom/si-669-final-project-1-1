@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     paddingHorizontal: '10%',
-    paddingVertical: '5%',
+    paddingVertical: '5%'
   },
   personalInfoSubContainer: {
     flex: 1,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     width: '100%',
-    paddingLeft: '10%',
+    paddingLeft: '10%'
   },
   listContainer: {
     flex: 1,
@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     flexDirection: 'column',
-    padding: '3%',
   },
   image: {
     flex: 1,
@@ -67,25 +66,30 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     marginHorizontal: '10%',
     marginTop: 0,
-    marginBottom: '5%',
+    marginBottom: '5%'
   },
-  menuButtonContainer:{
+  menuButtonContainer: {
     width: '100%',
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
+    padding: '3%'
   },
-  tripMetaInfoContainer:{
+  tripMetaInfoContainer: {
     width: '100%',
     alignItems: 'flex-start',
     justifyContent: 'flex-end',
+    padding: '3%'
   },
-  tripMetaInfoTitle:{
+  tripMetaInfoTitle: {
     fontSize: 24,
     color: 'white'
   },
-  tripMetaInfoDate:{
+  tripMetaInfoDate: {
     fontSize: 16,
     color: 'white'
+  },
+  avatarContainer: {
+
   },
   overlayView: {
     flex: 0.3,

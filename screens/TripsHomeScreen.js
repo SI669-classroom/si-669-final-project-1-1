@@ -16,10 +16,8 @@ import { load } from '../data/Actions'
 
 function TripsHomeScreen (props) {
   const { navigation, route } = props
-  const listItems = useSelector(state => state.listItems)
-  const groups = useSelector(state => state.groups)
+  const trips = useSelector(state => state.trips)
   const [overlayVisible, setOverlayVisible] = useState(false)
-  const [filterGroup, setFilterGroup] = useState('')
 
   const dispatch = useDispatch()
   useEffect(() => {
@@ -50,9 +48,7 @@ function TripsHomeScreen (props) {
       </View>
       <View style={styles.listContainer}>
         <FlatList
-          data={listItems.filter(
-            item => filterGroup === '' || item.groups.includes(filterGroup)
-          )}
+          data={trips}
           renderItem={({ item }) => {
             return <TripListItem item={item} navigation={navigation} />
           }}

@@ -14,6 +14,10 @@ import { rootReducer } from './data/Reducer';
 
 const store = configureStore({
   reducer: rootReducer, 
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 function ListTabStack() {

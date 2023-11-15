@@ -6,19 +6,19 @@ import {
   Image
 } from 'react-native'
 import { ListItem, Button, Icon } from 'react-native-elements'
-import { Entypo } from '@expo/vector-icons'
+import { Entypo, MaterialIcons } from '@expo/vector-icons'
 import { Avatar, Card } from '@rneui/themed'
+import { LinearGradient } from 'expo-linear-gradient'
 import { useSelector, useDispatch } from 'react-redux'
-import styles from '../Styles'
+import styles, { grayscale, secondaryColor } from '../Styles'
 
 function TripListItem (props) {
   const { item, navigation } = props
-  const users = [
-    {
-      name: 'brynn',
-      avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
-    }
-  ]
+  const options = {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric'
+  }
   return (
     <ImageBackground
       source={{ uri: 'https://legacy.reactjs.org/logo-og.png' }}
@@ -26,21 +26,38 @@ function TripListItem (props) {
       style={styles.image}
     >
       <View style={styles.tripListItemContainter}>
-        <View style={styles.menuButtonContainer}>
+        <LinearGradient
+          colors={['rgba(0,0,0,0.8)', 'transparent']}
+          style={styles.menuButtonContainer}
+        >
           <TouchableOpacity>
             <Entypo name='dots-three-horizontal' size={24} color='white' />
           </TouchableOpacity>
-        </View>
-        <View style={styles.tripMetaInfoContainer}>
-          <Avatar
-            size={32}
-            rounded
-            icon={{ name: 'pencil', type: 'font-awesome' }}
-            containerStyle={{ backgroundColor: '#9700b9' }}
-          />
-          <Text style={styles.tripMetaInfoTitle}>Travel Name</Text>
-          <Text style={styles.tripMetaInfoDate}>start date - end date</Text>
-        </View>
+        </LinearGradient>
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.8)']}
+          style={styles.tripMetaInfoContainer}
+        >
+          <View style={styles.avatarContainer}>
+            <Avatar
+              size={32}
+              rounded
+              icon={{
+                name: 'add',
+                type: 'MaterialIcons',
+                color: secondaryColor
+              }}
+              containerStyle={{ backgroundColor: grayscale }}
+            />
+          </View>
+          <Text style={styles.tripMetaInfoTitle}>{item.title}</Text>
+          <Text
+            style={styles.tripMetaInfoDate}
+          >{`${item.startDate.toLocaleDateString(
+            'en-EN',
+            options
+          )} - ${item.endDate.toLocaleDateString('en-EN', options)}`}</Text>
+        </LinearGradient>
       </View>
     </ImageBackground>
   )
