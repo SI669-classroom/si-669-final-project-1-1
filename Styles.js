@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingVertical: 0,
     marginHorizontal: '10%',
-    marginTop: '5%',
-    marginBottom: 0,
+    marginTop: 0,
+    marginBottom: '5%',
   },
   menuButtonContainer:{
     width: '100%',
