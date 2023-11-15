@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     width: '100%',
-    paddingHorizontal: '5%',
     paddingBottom: '2%'
   },
   headerText: {
@@ -48,12 +47,46 @@ const styles = StyleSheet.create({
     paddingLeft: '10%',
   },
   listContainer: {
-    flex: 0.6,
+    flex: 1,
     width: '100%',
-    paddingLeft: '10%',
-    paddingTop: '10%'
+    paddingTop: '5%'
   },
-
+  // TripListItem
+  tripListItemContainter: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    padding: '3%',
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+    height: 250,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    marginHorizontal: '10%',
+    marginTop: '5%',
+    marginBottom: 0,
+  },
+  menuButtonContainer:{
+    width: '100%',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+  },
+  tripMetaInfoContainer:{
+    width: '100%',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
+  },
+  tripMetaInfoTitle:{
+    fontSize: 24,
+    color: 'white'
+  },
+  tripMetaInfoDate:{
+    fontSize: 16,
+    color: 'white'
+  },
   overlayView: {
     flex: 0.3,
     flexDirection: 'column',
