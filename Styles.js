@@ -28,6 +28,21 @@ const styles = StyleSheet.create({
     borderBottomColor: grayscale,
     borderBottomWidth: 1
   },
+  withDividerTop: {
+    borderTopColor: grayscale,
+    borderTopWidth: 1
+  },
+  footer: {
+    flex: 0.1,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    paddingBottom: '5%'
+  },
+  footerText: {
+    fontSize: 20
+  },
   // TripsHome
   personalInfoContainer: {
     flex: 0.1,
@@ -56,7 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   image: {
     flex: 1,
@@ -88,8 +103,35 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white'
   },
-  avatarContainer: {
-
+  avatarContainer: {},
+  // TripMetaEdit
+  metaEditContainer:{
+    flex: 1,
+    flexDirection: 'column',
+    width: '100%',
+    paddingTop: '5%',
+    paddingHorizontal: '10%',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  metaEditFieldContainer:{
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    minHeight: '7%',
+  },
+  metaEditFieldLabel:{
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  metaEditField:{
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  imageContainer: {
+    width: '100%',
+    height: '50%',
   },
   overlayView: {
     flex: 0.3,

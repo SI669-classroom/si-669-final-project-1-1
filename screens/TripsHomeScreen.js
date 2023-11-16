@@ -9,7 +9,7 @@ import {
   TouchableHighlight
 } from 'react-native'
 import { Input, Button, Overlay, Avatar } from '@rneui/themed'
-import { FontAwesome, Ionicons, AntDesign } from '@expo/vector-icons'
+import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import styles, { primaryColor, secondaryColor } from '../Styles'
 import TripListItem from '../components/TripListItem'
 import { load } from '../data/Actions'
@@ -54,6 +54,13 @@ function TripsHomeScreen (props) {
           }}
         />
       </View>
+      <TouchableOpacity style={[styles.footer, styles.withDividerTop]} onPress={() => {
+            navigation.navigate('TripMetaEdit', {
+              item: {key: -1}
+            })
+          }}>
+        <MaterialIcons name='add-circle' size={40} color={primaryColor} />
+      </TouchableOpacity>
     </View>
   )
 }

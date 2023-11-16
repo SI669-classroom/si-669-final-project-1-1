@@ -8,6 +8,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import TripsHomeScreen from './screens/TripsHomeScreen';
 import TripDetailsScreen from './screens/TripDetailsScreen';
 import PackingListScreen from './screens/PackingListScreen';
+import TripMetaEditScreen from './screens/TripMetaEditScreen';
 
 import { rootReducer } from './data/Reducer';
 
@@ -27,6 +28,7 @@ function ListTabStack() {
     <Stack.Navigator initialRouteName='TripsHome' screenOptions={{ headerShown: false }}>
       <Stack.Screen name='TripsHome' component={TripsHomeScreen}/>
       <Stack.Screen name='TripDetails' component={TripDetailsScreen}/>
+      <Stack.Screen name='TripMetaEdit' component={TripMetaEditScreen}/>
       <Stack.Screen name='PackingList' component={PackingListScreen}/>
     </Stack.Navigator>
   )
