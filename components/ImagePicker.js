@@ -9,7 +9,7 @@ import {
   useWindowDimensions
 } from 'react-native'
 import { Input, Button, Overlay, Avatar } from '@rneui/themed'
-import manageFileUpload from '../data/Storage'
+import { manageFileUpload } from '../data/Storage'
 import styles, { primaryColor } from '../Styles'
 import { AntDesign, Feather } from '@expo/vector-icons'
 
@@ -72,7 +72,7 @@ const getBlobFromUri = async uri => {
 }
 
 export default function ImagePickerComponent (props) {
-  const { onGetImg } = props
+  const { onGetImg, onGetImgUri } = props
 
   const [imgURI, setImageURI] = React.useState(null)
   const { width } = useWindowDimensions()
@@ -83,6 +83,7 @@ export default function ImagePickerComponent (props) {
     if (imgData.imgURI) {
       setImageURI(imgData.imgURI)
       onGetImg(imgData.imgName)
+      onGetImgUri(imgData.imgURI)
     }
   }
 

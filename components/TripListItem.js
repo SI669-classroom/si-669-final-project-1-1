@@ -21,7 +21,7 @@ function TripListItem (props) {
   }
   return (
     <ImageBackground
-      source={{ uri: 'https://legacy.reactjs.org/logo-og.png' }}
+      source={{ uri: item.uri }}
       resizeMode='cover'
       style={styles.image}
     >

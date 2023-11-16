@@ -21,7 +21,6 @@ import {
 import styles, { primaryColor } from '../Styles'
 import { addItem, updateItem, deleteItem } from '../data/Actions'
 import ImagePickerComponent from '../components/ImagePicker'
-import storage from 'firebase/storage'
 import DateTimePicker from '@react-native-community/datetimepicker'
 
 function TripMetaEditScreen (props) {
@@ -31,14 +30,15 @@ function TripMetaEditScreen (props) {
   const { item } = route.params
 
   const [title, setTitle] = useState('')
-  const [image, setImage] = useState('')
+  const [imageName, setImageName] = useState('')
+  const [imageUri, setImageUri] = useState('')
   const [start, setStart] = useState(new Date(Date.now()))
   const [end, setEnd] = useState(new Date(Date.now()))
 
   const save = () => {
     if (title === '') {
       alert('Please set trip title.')
-    } else if (image === '') {
+    } else if (imageName === '') {
       alert('Please upload the cover image.')
     } else if (start > end) {
       alert('Start date must be before end date.')
@@ -47,7 +47,8 @@ function TripMetaEditScreen (props) {
         dispatch(
           addItem({
             title: title,
-            cover: image,
+            cover: imageName,
+            uri: imageUri,
             startDate: start,
             endDate: end
           })
@@ -56,7 +57,8 @@ function TripMetaEditScreen (props) {
         dispatch(
           updateItem(item, {
             title: title,
-            cover: image,
+            cover: imageName,
+            uri: imageUri,
             startDate: start,
             endDate: end
           })
@@ -113,7 +115,10 @@ function TripMetaEditScreen (props) {
           </View>
           <View style={styles.metaEditFieldContainer}>
             <Text style={styles.metaEditFieldLabel}>Cover Image: </Text>
-            <ImagePickerComponent onGetImg={setImage} />
+            <ImagePickerComponent
+              onGetImg={setImageName}
+              onGetImgUri={setImageUri}
+            />
           </View>
         </View>
         <View style={[styles.footer, styles.withDividerTop]}>

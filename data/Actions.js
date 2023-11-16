@@ -10,24 +10,17 @@ import {
 } from 'firebase/firestore'
 
 import { firebaseConfig } from '../Secrets'
-import {
-  ADD_ITEM,
-  UPDATE_ITEM,
-  DELETE_ITEM,
-  LOAD,
-} from './Reducer'
+import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, LOAD } from './Reducer'
+import { manageFileDownload } from './Storage'
 
-let app
-if (getApps().length < 1) {
-  app = initializeApp(firebaseConfig)
-}
+app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
 
-const addItem = (trip) => {
+const addItem = trip => {
   return async dispatch => {
     console.log(trip)
     const docRef = await addDoc(collection(db, 'TripsMeta'), {
-      ...trip,
+      ...trip
     })
     const id = docRef.id
     dispatch({
@@ -44,13 +37,13 @@ const updateItem = (item, trip) => {
   return async dispatch => {
     const d = doc(db, 'TripsMeta', item.key)
     await updateDoc(d, {
-      ...trip,
+      ...trip
     })
     dispatch({
       type: UPDATE_ITEM,
       payload: {
         key: item.key,
-        item: trip,
+        item: trip
       }
     })
   }
@@ -72,28 +65,25 @@ const deleteItem = item => {
 const load = () => {
   return async dispatch => {
     let querySnapshotContacts = await getDocs(collection(db, 'TripsMeta'))
-    let newTrips = querySnapshotContacts.docs.map(docSnap => {
-      console.log(docSnap.data().endDate.toDate())
-      return {
-        ...docSnap.data(),
-        key: docSnap.id,
-        endDate: docSnap.data().endDate.toDate(),
-        startDate: docSnap.data().startDate.toDate(),
-      }
-    })
-    console.log(newTrips)
+    let newTrips = await Promise.all(
+      querySnapshotContacts.docs.map(async docSnap => {
+        let uri = await manageFileDownload(docSnap.data().cover)
+        return {
+          ...docSnap.data(),
+          key: docSnap.id,
+          uri: uri,
+          endDate: docSnap.data().endDate.toDate(),
+          startDate: docSnap.data().startDate.toDate()
+        }
+      })
+    )
     dispatch({
       type: LOAD,
       payload: {
-        newTrips: newTrips,
+        newTrips: newTrips
       }
     })
   }
 }
 
-export {
-  addItem,
-  updateItem,
-  deleteItem,
-  load
-}
+export { addItem, updateItem, deleteItem, load }
