@@ -29,12 +29,16 @@ function TripMetaEditScreen (props) {
   const { navigation, route } = props
   const { item } = route.params
 
-  const [title, setTitle] = useState('')
-  const [imageName, setImageName] = useState('')
-  const [imageUri, setImageUri] = useState('')
-  const [start, setStart] = useState(new Date(Date.now()))
-  const [end, setEnd] = useState(new Date(Date.now()))
-
+  const [title, setTitle] = useState(item.key === -1 ? '' : item.title)
+  const [imageName, setImageName] = useState(item.key === -1 ? '' : item.cover)
+  const [imageUri, setImageUri] = useState(item.key === -1 ? '' : item.uri)
+  const [start, setStart] = useState(
+    item.key === -1 ? new Date(Date.now()) : item.startDate
+  )
+  const [end, setEnd] = useState(
+    item.key === -1 ? new Date(Date.now()) : item.endDate
+  )
+  console.log(item)
   const save = () => {
     if (title === '') {
       alert('Please set trip title.')
@@ -118,6 +122,7 @@ function TripMetaEditScreen (props) {
             <ImagePickerComponent
               onGetImg={setImageName}
               onGetImgUri={setImageUri}
+              uri={imageUri}
             />
           </View>
         </View>

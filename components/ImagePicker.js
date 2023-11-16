@@ -72,9 +72,9 @@ const getBlobFromUri = async uri => {
 }
 
 export default function ImagePickerComponent (props) {
-  const { onGetImg, onGetImgUri } = props
+  const { onGetImg, onGetImgUri, uri } = props
 
-  const [imgURI, setImageURI] = React.useState(null)
+  const [imgURI, setImageURI] = React.useState(uri)
   const { width } = useWindowDimensions()
 
   const handleLocalImageUpload = async () => {

@@ -5,10 +5,12 @@ import {
   ImageBackground,
   Image
 } from 'react-native'
+import React, { useState } from 'react'
 import { ListItem, Button, Icon } from 'react-native-elements'
 import { Entypo, MaterialIcons } from '@expo/vector-icons'
 import { Avatar, Card } from '@rneui/themed'
 import { LinearGradient } from 'expo-linear-gradient'
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
 import { useSelector, useDispatch } from 'react-redux'
 import styles, { grayscale, secondaryColor } from '../Styles'
 
@@ -19,6 +21,13 @@ function TripListItem (props) {
     month: 'short',
     day: 'numeric'
   }
+
+  const [visible, setVisible] = useState(false)
+
+  const hideMenu = () => setVisible(false)
+
+  const showMenu = () => setVisible(true)
+
   return (
     <ImageBackground
       source={{ uri: item.uri }}
@@ -30,9 +39,41 @@ function TripListItem (props) {
           colors={['rgba(0,0,0,0.8)', 'transparent']}
           style={styles.menuButtonContainer}
         >
-          <TouchableOpacity>
-            <Entypo name='dots-three-horizontal' size={24} color='white' />
-          </TouchableOpacity>
+          <Menu
+            visible={visible}
+            anchor={
+              <Entypo
+                name='dots-three-horizontal'
+                size={24}
+                color='white'
+                onPress={showMenu}
+              />
+            }
+            onRequestClose={hideMenu}
+          >
+            <MenuItem
+              onPress={() => {
+                hideMenu()
+                navigation.navigate('TripMetaEdit', {
+                  item: item
+                })
+              }}
+            >
+              Edit
+            </MenuItem>
+            <MenuDivider />
+            <MenuItem onPress={hideMenu}>Delete</MenuItem>
+          </Menu>
+          {/* <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('TripMetaEdit', {
+                item: item
+              })
+            }}
+          >
+            
+            
+          </TouchableOpacity> */}
         </LinearGradient>
         <LinearGradient
           colors={['transparent', 'rgba(0,0,0,0.8)']}
