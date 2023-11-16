@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
 import { useSelector, useDispatch } from 'react-redux'
 import styles, { grayscale, secondaryColor } from '../Styles'
+import { deleteItem } from '../data/Actions'
 
 function TripListItem (props) {
   const { item, navigation } = props
@@ -22,10 +23,10 @@ function TripListItem (props) {
     day: 'numeric'
   }
 
+  const dispatch = useDispatch()
+
   const [visible, setVisible] = useState(false)
-
   const hideMenu = () => setVisible(false)
-
   const showMenu = () => setVisible(true)
 
   return (
@@ -62,7 +63,12 @@ function TripListItem (props) {
               Edit
             </MenuItem>
             <MenuDivider />
-            <MenuItem onPress={hideMenu}>Delete</MenuItem>
+            <MenuItem onPress={() => {
+                hideMenu()
+                dispatch(
+                  deleteItem(item)
+                )
+              }}>Delete</MenuItem>
           </Menu>
           {/* <TouchableOpacity
             onPress={() => {
