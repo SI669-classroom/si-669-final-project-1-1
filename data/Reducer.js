@@ -7,12 +7,11 @@ const initialState = {
   trips: [],
 }
 
-const addItem = (state, item, groups, key) => {
+const addItem = (state, item, key) => {
   let { trips } = state
   let newListItems = trips.concat({
     ...item,
-    key: key,
-    groups: groups
+    key: key
   })
   return {
     ...state,
@@ -20,12 +19,11 @@ const addItem = (state, item, groups, key) => {
   }
 }
 
-const updateItem = (state, itemId, item, groups) => {
+const updateItem = (state, itemId, item) => {
   let { trips } = state
   let newItem = {
     ...item,
-    key: itemId,
-    groups: groups
+    key: itemId
   }
   let newListItems = trips.map(elem =>
     elem.key === itemId ? newItem : elem
@@ -56,9 +54,9 @@ function rootReducer (state = initialState, action) {
   const { type, payload } = action
   switch (type) {
     case ADD_ITEM:
-      return addItem(state, payload.item, payload.groups, payload.key)
+      return addItem(state, payload.item, payload.key)
     case UPDATE_ITEM:
-      return updateItem(state, payload.key, payload.item, payload.groups)
+      return updateItem(state, payload.key, payload.item)
     case DELETE_ITEM:
       return deleteItem(state, payload.key)
     case LOAD:

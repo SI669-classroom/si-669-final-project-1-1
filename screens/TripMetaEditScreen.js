@@ -43,6 +43,25 @@ function TripMetaEditScreen (props) {
     } else if (start > end) {
       alert('Start date must be before end date.')
     } else {
+      if (item.key === -1) {
+        dispatch(
+          addItem({
+            title: title,
+            cover: image,
+            startDate: start,
+            endDate: end
+          })
+        )
+      } else {
+        dispatch(
+          updateItem(item, {
+            title: title,
+            cover: image,
+            startDate: start,
+            endDate: end
+          })
+        )
+      }
       navigation.navigate('TripsHome')
     }
   }
@@ -62,7 +81,7 @@ function TripMetaEditScreen (props) {
               <Input
                 placeholder='Enter Trip Title'
                 value={title}
-                onChange={setTitle}
+                onChangeText={text => setTitle(text)}
               />
             </View>
           </View>

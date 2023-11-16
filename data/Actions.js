@@ -23,33 +23,34 @@ if (getApps().length < 1) {
 }
 const db = getFirestore(app)
 
-const addItem = (contact) => {
+const addItem = (trip) => {
   return async dispatch => {
+    console.log(trip)
     const docRef = await addDoc(collection(db, 'TripsMeta'), {
-      ...contact,
+      ...trip,
     })
     const id = docRef.id
     dispatch({
       type: ADD_ITEM,
       payload: {
-        item: contact,
+        item: trip,
         key: id
       }
     })
   }
 }
 
-const updateItem = (item, contact) => {
+const updateItem = (item, trip) => {
   return async dispatch => {
     const d = doc(db, 'TripsMeta', item.key)
     await updateDoc(d, {
-      ...contact,
+      ...trip,
     })
     dispatch({
       type: UPDATE_ITEM,
       payload: {
         key: item.key,
-        item: contact,
+        item: trip,
       }
     })
   }
