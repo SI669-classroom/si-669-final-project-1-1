@@ -8,7 +8,9 @@ import {
   addDoc,
   getDocs,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  query,
+  where
 } from 'firebase/firestore'
 
 import { firebaseConfig } from '../Secrets'
@@ -73,21 +75,30 @@ const deleteItem = item => {
   }
 }
 
-const load = () => {
+const load = currUid => {
   return async dispatch => {
-    let querySnapshotContacts = await getDocs(collection(db, 'TripsMeta'))
-    let newTrips = await Promise.all(
-      querySnapshotContacts.docs.map(async docSnap => {
-        let uri = await manageFileDownload(docSnap.data().cover)
-        return {
-          ...docSnap.data(),
-          key: docSnap.id,
-          uri: uri,
-          endDate: docSnap.data().endDate.toDate(),
-          startDate: docSnap.data().startDate.toDate()
-        }
-      })
-    )
+    let newTrips
+    if (currUid === '') {
+      newTrips = []
+    } else {
+      const q = query(
+        collection(db, 'TripsMeta'),
+        where('owner', '==', currUid)
+      )
+      let querySnapshotContacts = await getDocs(collection(db, 'TripsMeta'))
+      newTrips = await Promise.all(
+        querySnapshotContacts.docs.map(async docSnap => {
+          let uri = await manageFileDownload(docSnap.data().cover)
+          return {
+            ...docSnap.data(),
+            key: docSnap.id,
+            uri: uri,
+            endDate: docSnap.data().endDate.toDate(),
+            startDate: docSnap.data().startDate.toDate()
+          }
+        })
+      )
+    }
     dispatch({
       type: LOAD,
       payload: {

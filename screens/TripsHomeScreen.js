@@ -20,12 +20,18 @@ function TripsHomeScreen (props) {
   const { navigation, route } = props
   const trips = useSelector(state => state.trips)
   const [overlayVisible, setOverlayVisible] = useState(false)
+  const [currentUser, setCurrentUser] = useState(null)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(load())
-    getAuthUser()
+    let currUser = getAuthUser()
+    if (currUser) {
+      dispatch(load(currUser.uid))
+    } else {
+      dispatch(load(''))
+    }
+    setCurrentUser(currUser)
   }, [])
 
   return (
@@ -38,19 +44,19 @@ function TripsHomeScreen (props) {
           size={72}
           rounded
           title={
-            getAuthUser()
-              ? getAuthUser().displayName.substr(0, 2).toUpperCase()
+            currentUser
+              ? currentUser.displayName.substr(0, 2).toUpperCase()
               : 'N/A'
           }
           containerStyle={{ backgroundColor: secondaryColor }}
         />
         <View style={styles.personalInfoSubContainer}>
-          {getAuthUser() ? (
+          {currentUser ? (
             <>
               <Text style={styles.personalInfoMainText}>
-                {getAuthUser().displayName}
+                {currentUser.displayName}
               </Text>
-              <Text style={styles.personalInfoText}>{getAuthUser().email}</Text>
+              <Text style={styles.personalInfoText}>{currentUser.email}</Text>
             </>
           ) : (
             <Button
