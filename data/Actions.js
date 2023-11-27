@@ -13,7 +13,10 @@ import { firebaseConfig } from '../Secrets'
 import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, LOAD } from './Reducer'
 import { manageFileDownload } from './Storage'
 
-app = initializeApp(firebaseConfig);
+let app
+if (getApps().length < 1) {
+  app = initializeApp(firebaseConfig)
+}
 const db = getFirestore(app)
 
 const addItem = trip => {

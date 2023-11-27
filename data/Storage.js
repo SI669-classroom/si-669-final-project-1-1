@@ -1,14 +1,20 @@
+import { initializeApp, getApps } from 'firebase/app'
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL
 } from 'firebase/storage'
+import { firebaseConfig } from '../Secrets'
 
+let app
+if (getApps().length < 1) {
+  app = initializeApp(firebaseConfig)
+}
 const storage = getStorage()
 
 // Create the file metadata
-/** @type {any} */
+
 const metadata = {
   contentType: 'image/jpeg'
 }
