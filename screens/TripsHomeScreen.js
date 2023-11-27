@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { Input, Button, Overlay, Avatar } from '@rneui/themed'
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons'
+
 import styles, { primaryColor, secondaryColor } from '../Styles'
 import TripListItem from '../components/TripListItem'
 import { load } from '../data/Actions'
@@ -21,10 +22,11 @@ function TripsHomeScreen (props) {
   const [overlayVisible, setOverlayVisible] = useState(false)
 
   const dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(load())
     getAuthUser()
-  }, [route])
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -35,7 +37,11 @@ function TripsHomeScreen (props) {
         <Avatar
           size={72}
           rounded
-          title='AB'
+          title={
+            getAuthUser()
+              ? getAuthUser().displayName.substr(0, 2).toUpperCase()
+              : 'N/A'
+          }
           containerStyle={{ backgroundColor: secondaryColor }}
         />
         <View style={styles.personalInfoSubContainer}>
@@ -44,9 +50,7 @@ function TripsHomeScreen (props) {
               <Text style={styles.personalInfoMainText}>
                 {getAuthUser().displayName}
               </Text>
-              <Text style={styles.personalInfoText}>
-                {getAuthUser().email}
-              </Text>
+              <Text style={styles.personalInfoText}>{getAuthUser().email}</Text>
             </>
           ) : (
             <Button

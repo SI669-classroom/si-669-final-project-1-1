@@ -32,7 +32,6 @@ const signOut = async () => {
 }
 
 const getAuthUser = () => {
-    console.log(auth.currentUser)
   return auth.currentUser
 }
 

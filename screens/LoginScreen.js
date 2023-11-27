@@ -50,7 +50,10 @@ function LoginBox ({ navigation }) {
           onPress={async () => {
             try {
               await signIn(email, password)
-              navigation.navigate('TripsHome')
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'TripsHome' }]
+              })
             } catch (error) {
               let msg = ''
               switch (error.code) {
@@ -141,7 +144,10 @@ function RegisterBox ({ navigation }) {
           onPress={async () => {
             try {
               await signUp(displayName, email, password)
-              navigation.navigate('TripsHome')
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'TripsHome' }]
+              })
             } catch (error) {
               let msg = ''
               switch (error.code) {
