@@ -13,6 +13,7 @@ import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import styles, { primaryColor, secondaryColor } from '../Styles'
 import TripListItem from '../components/TripListItem'
 import { load } from '../data/Actions'
+import { getAuthUser, signOut } from '../AuthManager'
 
 function TripsHomeScreen (props) {
   const { navigation, route } = props
@@ -22,7 +23,8 @@ function TripsHomeScreen (props) {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(load())
-  }, [])
+    getAuthUser()
+  }, [route])
 
   return (
     <View style={styles.container}>
@@ -37,13 +39,24 @@ function TripsHomeScreen (props) {
           containerStyle={{ backgroundColor: secondaryColor }}
         />
         <View style={styles.personalInfoSubContainer}>
-          <Button
-            type='solid'
-            color={primaryColor}
-            buttonStyle={{ width: 150 }}
-            onPress={() => navigation.navigate('Login')}
-            title='LOGIN'
-          />
+          {getAuthUser() ? (
+            <>
+              <Text style={styles.personalInfoMainText}>
+                {getAuthUser().displayName}
+              </Text>
+              <Text style={styles.personalInfoText}>
+                {getAuthUser().email}
+              </Text>
+            </>
+          ) : (
+            <Button
+              type='solid'
+              color={primaryColor}
+              buttonStyle={{ width: 150 }}
+              onPress={() => navigation.navigate('Login')}
+              title='LOGIN'
+            />
+          )}
         </View>
       </View>
       <View style={styles.listContainer}>
@@ -54,11 +67,14 @@ function TripsHomeScreen (props) {
           }}
         />
       </View>
-      <TouchableOpacity style={[styles.footer, styles.withDividerTop]} onPress={() => {
-            navigation.navigate('TripMetaEdit', {
-              item: {key: -1}
-            })
-          }}>
+      <TouchableOpacity
+        style={[styles.footer, styles.withDividerTop]}
+        onPress={() => {
+          navigation.navigate('TripMetaEdit', {
+            item: { key: -1 }
+          })
+        }}
+      >
         <MaterialIcons name='add-circle' size={40} color={primaryColor} />
       </TouchableOpacity>
     </View>

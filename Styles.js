@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 export const primaryColor = '#ef8557'
 export const secondaryColor = '#293a47'
 export const grayscale = '#d0daca'
+export const darkGrayscale = '#7C8178'
 export const inactivatedColor = '#88a3a7'
 
 const styles = StyleSheet.create({
@@ -69,6 +70,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     paddingLeft: '10%'
+  },
+  personalInfoMainText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: secondaryColor
+  },
+  personalInfoText: {
+    fontSize: 16,
+    fontWeight: 'normal',
+    color: darkGrayscale
   },
   listContainer: {
     flex: 1,

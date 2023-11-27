@@ -31,4 +31,9 @@ const signOut = async () => {
   await fbSignOut(auth)
 }
 
-export { signIn, signUp, signOut }
+const getAuthUser = () => {
+    console.log(auth.currentUser)
+  return auth.currentUser
+}
+
+export { signIn, signUp, signOut, getAuthUser }
