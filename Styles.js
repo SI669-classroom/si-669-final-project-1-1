@@ -177,17 +177,6 @@ const styles = StyleSheet.create({
     paddingTop: '30%',
     paddingBottom: '10%'
   },
-  loginHeader: {
-    width: '100%',
-    padding: '3%',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  loginHeaderText: {
-    fontSize: 24,
-    color: 'black',
-    paddingBottom: '5%'
-  },
   loginRow: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -215,13 +204,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 18,
     padding: '2%'
-  },
-  modeSwitchContainer: {
-    flex: 0.2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    backgroundColor: 'pink'
   },
   loginButtonRow: {
     width: '100%',

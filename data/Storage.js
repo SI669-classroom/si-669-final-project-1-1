@@ -8,8 +8,11 @@ import {
 import { firebaseConfig } from '../Secrets'
 
 let app
-if (getApps().length < 1) {
+const apps = getApps()
+if (apps.length == 0) {
   app = initializeApp(firebaseConfig)
+} else {
+  app = apps[0]
 }
 const storage = getStorage()
 

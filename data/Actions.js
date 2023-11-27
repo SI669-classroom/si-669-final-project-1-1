@@ -14,8 +14,11 @@ import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, LOAD } from './Reducer'
 import { manageFileDownload } from './Storage'
 
 let app
-if (getApps().length < 1) {
+const apps = getApps()
+if (apps.length == 0) {
   app = initializeApp(firebaseConfig)
+} else {
+  app = apps[0]
 }
 const db = getFirestore(app)
 
