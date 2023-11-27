@@ -32,6 +32,11 @@ const styles = StyleSheet.create({
     borderTopColor: grayscale,
     borderTopWidth: 1
   },
+  bodyContainer: {
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   footer: {
     flex: 0.1,
     alignItems: 'flex-end',
@@ -42,6 +47,10 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 20
+  },
+  linkText: {
+    color: primaryColor,
+    textDecorationLine: 'underline',
   },
   // TripsHome
   personalInfoContainer: {
@@ -158,7 +167,67 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#3b5998'
-  }
+  },
+  // login
+  loginContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: '100%',
+    paddingTop: '30%',
+    paddingBottom: '10%'
+  },
+  loginHeader: {
+    width: '100%',
+    padding: '3%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  loginHeaderText: {
+    fontSize: 24,
+    color: 'black',
+    paddingBottom: '5%'
+  },
+  loginRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: '100%',
+    padding: '3%'
+  },
+  loginLabelContainer: {
+    flex: 0.3,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+  },
+  loginLabelText: {
+    fontSize: 18
+  },
+  loginInputContainer: {
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: '100%'
+  },
+  loginInputBox: {
+    width: '100%',
+    borderColor: grayscale,
+    borderBottomWidth: 1,
+    fontSize: 18,
+    padding: '2%'
+  },
+  modeSwitchContainer: {
+    flex: 0.2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    backgroundColor: 'pink'
+  },
+  loginButtonRow: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 })
 
 export default styles

@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { Button } from '@rneui/themed'
 
-import styles from '../Styles'
+import styles, { primaryColor } from '../Styles'
 
-function LoginBox ({ navigation }) {
+function RegisterBox ({ navigation }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -42,16 +42,34 @@ function LoginBox ({ navigation }) {
         </View>
       </View>
       <View style={styles.loginRow}>
-        <Button
-          onPress={() => {
-            navigation.navigate('Home')
-          }}
-        >
-          LOGIN
-        </Button>
+        <View style={styles.loginLabelContainer}>
+          <Text style={styles.loginLabelText}>Confirm: </Text>
+        </View>
+        <View style={styles.loginInputContainer}>
+          <TextInput
+            style={styles.loginInputBox}
+            placeholder='confirm password'
+            autoCapitalize='none'
+            spellCheck={false}
+            secureTextEntry={true}
+            onChangeText={text => setPassword(text)}
+            value={password}
+          />
+        </View>
+      </View>
+      <View style={[styles.loginRow, {marginTop: '20%'}]}>
+      <Button
+            type='solid'
+            color={primaryColor}
+            buttonStyle={{ width: 150 }}
+            onPress={() => navigation.navigate('Home')}
+            title='REGISTER'
+          />
       </View>
       <View style={styles.loginRow}>
-        <Text>No Account? </Text><TouchableOpacity><Text style={styles.linkText}>Register</Text></TouchableOpacity>
+        <Text>Already Have an Account? </Text><TouchableOpacity onPress={() => {
+            navigation.goBack()
+          }}><Text style={styles.linkText}>Back to Login</Text></TouchableOpacity>
       </View>
     </View>
   )
@@ -64,7 +82,7 @@ function RegisterScreen ({ navigation }) {
         <Text style={styles.headerText}>Register</Text>
       </View>
       <View style={styles.bodyContainer}>
-        <LoginBox navigation={navigation} />
+        <RegisterBox navigation={navigation} />
       </View>
     </View>
   )

@@ -42,7 +42,7 @@ function TripsHomeScreen (props) {
             color={primaryColor}
             buttonStyle={{ width: 150 }}
             onPress={() => navigation.navigate('Login')}
-            title='LOG IN'
+            title='LOGIN'
           />
         </View>
       </View>
