@@ -22,6 +22,7 @@ import styles, { primaryColor } from '../Styles'
 import { addItem, updateItem, deleteItem } from '../data/Actions'
 import ImagePickerComponent from '../components/ImagePicker'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import { getAuthUser } from '../AuthManager'
 
 function TripMetaEditScreen (props) {
   const dispatch = useDispatch()
@@ -38,7 +39,8 @@ function TripMetaEditScreen (props) {
   const [end, setEnd] = useState(
     item.key === -1 ? new Date(Date.now()) : item.endDate
   )
-  console.log(item)
+  let currUser = getAuthUser()
+
   const save = () => {
     if (title === '') {
       alert('Please set trip title.')
@@ -54,7 +56,8 @@ function TripMetaEditScreen (props) {
             cover: imageName,
             uri: imageUri,
             startDate: start,
-            endDate: end
+            endDate: end,
+            owner: currUser.uid
           })
         )
       } else {
@@ -64,7 +67,8 @@ function TripMetaEditScreen (props) {
             cover: imageName,
             uri: imageUri,
             startDate: start,
-            endDate: end
+            endDate: end,
+            owner: currUser.uid
           })
         )
       }
