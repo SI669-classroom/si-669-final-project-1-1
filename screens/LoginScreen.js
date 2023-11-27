@@ -52,7 +52,25 @@ function LoginBox ({ navigation }) {
               await signIn(email, password)
               navigation.navigate('TripsHome')
             } catch (error) {
-              Alert.alert('Sign In Error', error.message, [{ text: 'OK' }])
+              let msg = ''
+              switch (error.code) {
+                case 'auth/invalid-login-credentials':
+                  msg =
+                    'Your login info is not correct. Please check your email and password and try again.'
+                  break
+                case 'auth/missing-password':
+                  msg = 'Please enter your password and retry.'
+                  break
+                case 'auth/invalid-email':
+                  msg =
+                    'Email address is invalid. Please check your email and retry.'
+                  break
+                default:
+                  break
+              }
+              Alert.alert('Login Error', msg === '' ? error.message : msg, [
+                { text: 'OK' }
+              ])
             }
           }}
           title='LOGIN'
@@ -125,7 +143,27 @@ function RegisterBox ({ navigation }) {
               await signUp(displayName, email, password)
               navigation.navigate('TripsHome')
             } catch (error) {
-              Alert.alert('Sign Up Error', error.message, [{ text: 'OK' }])
+              let msg = ''
+              switch (error.code) {
+                case 'auth/invalid-login-credentials':
+                  msg = ''
+                  break
+                case 'auth/missing-password':
+                  msg = 'Please enter your password.'
+                  break
+                case 'auth/invalid-email':
+                  msg = 'Email address is invalid. Please check your email.'
+                  break
+                case 'auth/weak-password':
+                  msg =
+                    'Password should be at least 6 characters. Please try a stronger password.'
+                  break
+                default:
+                  break
+              }
+              Alert.alert('Register Error', msg === '' ? error.message : msg, [
+                { text: 'OK' }
+              ])
             }
           }}
           title='REGISTER'
@@ -183,84 +221,4 @@ function LoginScreen ({ navigation }) {
   )
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center'
-//   },
-//   bodyContainer: {
-//     flex: 0.5,
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   },
-//   loginContainer: {
-//     flex: 1,
-//     justifyContent: 'flex-start',
-//     alignItems: 'center',
-//     width: '100%',
-//     paddingTop: '30%',
-//     paddingBottom: '10%'
-//   },
-//   loginHeader: {
-//     width: '100%',
-//     padding: '3%',
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   },
-//   loginHeaderText: {
-//     fontSize: 24,
-//     color: 'black',
-//     paddingBottom: '5%'
-//   },
-//   loginRow: {
-//     flexDirection: 'row',
-//     justifyContent: 'flex-start',
-//     alignItems: 'center',
-//     width: '100%',
-//     padding: '3%'
-//   },
-//   loginLabelContainer: {
-//     flex: 0.3,
-//     justifyContent: 'center',
-//     alignItems: 'flex-end'
-//   },
-//   loginLabelText: {
-//     fontSize: 18
-//   },
-//   loginInputContainer: {
-//     flex: 0.5,
-//     justifyContent: 'center',
-//     alignItems: 'flex-start',
-//     width: '100%'
-//   },
-//   loginInputBox: {
-//     width: '100%',
-//     borderColor: 'lightgray',
-//     borderWidth: 1,
-//     borderRadius: 6,
-//     fontSize: 18,
-//     padding: '2%'
-//   },
-//   modeSwitchContainer: {
-//     flex: 0.2,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     width: '100%',
-//     backgroundColor: 'pink'
-//   },
-//   loginButtonRow: {
-//     width: '100%',
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   },
-//   listContainer: {
-//     flex: 0.7,
-//     backgroundColor: '#ccc',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     width: '100%'
-//   }
-// })
 export default LoginScreen
