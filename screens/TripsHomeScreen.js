@@ -41,7 +41,7 @@ function TripsHomeScreen (props) {
             type='solid'
             color={primaryColor}
             buttonStyle={{ width: 150 }}
-            onPress={() => alert('click')}
+            onPress={() => navigation.navigate('Login')}
             title='LOG IN'
           />
         </View>

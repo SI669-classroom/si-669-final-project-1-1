@@ -9,6 +9,7 @@ import TripsHomeScreen from './screens/TripsHomeScreen';
 import TripDetailsScreen from './screens/TripDetailsScreen';
 import PackingListScreen from './screens/PackingListScreen';
 import TripMetaEditScreen from './screens/TripMetaEditScreen';
+import LoginScreen from './screens/LoginScreen';
 
 import { rootReducer } from './data/Reducer';
 
@@ -26,6 +27,7 @@ function ListTabStack() {
 
   return (
     <Stack.Navigator initialRouteName='TripsHome' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Login' component={LoginScreen}/>
       <Stack.Screen name='TripsHome' component={TripsHomeScreen}/>
       <Stack.Screen name='TripDetails' component={TripDetailsScreen}/>
       <Stack.Screen name='TripMetaEdit' component={TripMetaEditScreen}/>
