@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   linkText: {
     color: primaryColor,
-    textDecorationLine: 'underline',
+    textDecorationLine: 'underline'
   },
   // TripsHome
   personalInfoContainer: {
@@ -125,33 +125,33 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {},
   // TripMetaEdit
-  metaEditContainer:{
+  metaEditContainer: {
     flex: 1,
     flexDirection: 'column',
     width: '100%',
     paddingTop: '5%',
     paddingHorizontal: '10%',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
-  metaEditFieldContainer:{
+  metaEditFieldContainer: {
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
-    minHeight: '7%',
+    minHeight: '7%'
   },
-  metaEditFieldLabel:{
+  metaEditFieldLabel: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
-  metaEditField:{
+  metaEditField: {
     flex: 1,
     alignItems: 'flex-start',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   imageContainer: {
     width: '100%',
-    height: '50%',
+    height: '50%'
   },
   overlayView: {
     flex: 0.3,
@@ -221,6 +221,119 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  // trip detail
+  tripSlidePanelContainer: {
+    width: '100%',
+    flex: 0.9,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  panel: {
+    flex: 1,
+    backgroundColor: 'white',
+    position: 'relative'
+  },
+  tripDetailMetaInfoContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginHorizontal: 0,
+    paddingHorizontal: '5%',
+    marginTop: '2%'
+  },
+  tripDetailMetaInfoRow: {
+    marginBottom: '2%'
+  },
+  tripDetailTitleText: {
+    fontSize: 20
+  },
+  tripDetailTimeText: {
+    fontSize: 16
+  },
+  packingListButton: {
+    backgroundColor: primaryColor,
+    paddingHorizontal: '3%',
+    paddingVertical: '1%',
+    borderRadius: '50%'
+  },
+  packingListText: {
+    fontSize: 14,
+    color: 'white'
+  },
+  // itinerary list
+  itineraryListHeader: {
+    justifyContent: 'center',
+    alignItems: 'space-between',
+    flexDirection: 'row',
+    paddingHorizontal: '5%',
+    paddingVertical: '2%'
+  },
+  itineraryListHeaderLeft: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 0.2,
+    marginRight: '3%',
+    paddingVertical: '1%',
+    backgroundColor: secondaryColor,
+    borderRadius: '50%'
+  },
+  itineraryListHeaderCenter: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingVertical: '1%',
+    flex: 0.6
+  },
+  itineraryListHeaderRight: {
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingVertical: '1%',
+    flex: 0.2
+  },
+  // itinerary list item
+  itineraryItemContainter: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: '5%',
+    height: 100
+  },
+  destinationTimeContainter: {
+    flex: 0.2,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  destinationTimeText: {
+    fontSize: 12
+  },
+  destinationCardContainter: {
+    flex: 0.8,
+    height: '100%',
+    marginLeft: '5%',
+    backgroundColor: grayscale,
+    justifyContent: 'center',
+    paddingHorizontal: '5%',
+    paddingVertical: '2%'
+  },
+  destinationCardDuration: {
+    fontSize: 14
+  },
+  destinationCardTitle: {
+    fontSize: 20
+  },
+  destinationCardAddress: {
+    fontSize: 14,
+    color: darkGrayscale
+  },
+  destinationCardNotes: {
+    fontSize: 14
+  },
+  itineraryAdd: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: '2%'
+  }
 })
 
 export default styles

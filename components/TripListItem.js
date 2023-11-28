@@ -35,7 +35,14 @@ function TripListItem (props) {
       resizeMode='cover'
       style={styles.image}
     >
-      <View style={styles.tripListItemContainter}>
+      <TouchableOpacity
+        style={styles.tripListItemContainter}
+        onPress={() => {
+          navigation.navigate('TripDetails', {
+            item: item
+          })
+        }}
+      >
         <LinearGradient
           colors={['rgba(0,0,0,0.8)', 'transparent']}
           style={styles.menuButtonContainer}
@@ -63,23 +70,15 @@ function TripListItem (props) {
               Edit
             </MenuItem>
             <MenuDivider />
-            <MenuItem onPress={() => {
+            <MenuItem
+              onPress={() => {
                 hideMenu()
-                dispatch(
-                  deleteItem(item)
-                )
-              }}>Delete</MenuItem>
+                dispatch(deleteItem(item))
+              }}
+            >
+              Delete
+            </MenuItem>
           </Menu>
-          {/* <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('TripMetaEdit', {
-                item: item
-              })
-            }}
-          >
-            
-            
-          </TouchableOpacity> */}
         </LinearGradient>
         <LinearGradient
           colors={['transparent', 'rgba(0,0,0,0.8)']}
@@ -105,7 +104,7 @@ function TripListItem (props) {
             options
           )} - ${item.endDate.toLocaleDateString('en-EN', options)}`}</Text>
         </LinearGradient>
-      </View>
+      </TouchableOpacity>
     </ImageBackground>
   )
 }
