@@ -63,6 +63,7 @@ function TripMetaEditScreen (props) {
       } else {
         dispatch(
           updateItem(item, {
+            ...item,
             title: title,
             cover: imageName,
             uri: imageUri,

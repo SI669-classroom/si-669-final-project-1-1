@@ -31,7 +31,6 @@ const db = getFirestore(app)
 
 const addItem = trip => {
   return async dispatch => {
-    console.log(trip)
     const docRef = await addDoc(collection(db, 'TripsMeta'), {
       ...trip
     })

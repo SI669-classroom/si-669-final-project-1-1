@@ -44,7 +44,6 @@ function TripDetailsScreen (props) {
     { key: 'second', title: 'Second' }
   ])
 
-  console.log(item)
   return (
     <View style={styles.container}>
       <View style={[styles.header, styles.withDividerBelow]}>
@@ -101,7 +100,7 @@ function TripDetailsScreen (props) {
                 </TouchableOpacity>
               </View>
             </View>
-            <ItineraryListTabs></ItineraryListTabs>
+            <ItineraryListTabs itinerary={item.itinerary} startDate={item.startDate} navigation={navigation} />
           </View>
         </SlidingUpPanel>
       </View>

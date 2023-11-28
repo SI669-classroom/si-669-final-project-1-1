@@ -16,37 +16,42 @@ import styles, { grayscale, primaryColor, secondaryColor } from '../Styles'
 import { deleteItem } from '../data/Actions'
 
 function ItineraryListItem (props) {
-  //   const { item, navigation } = props
-  const options = {
-    weekday: 'long',
-    month: 'short',
-    day: 'numeric'
-  }
-
   const dispatch = useDispatch()
-
-  const [visible, setVisible] = useState(false)
-  const hideMenu = () => setVisible(false)
-  const showMenu = () => setVisible(true)
+  const { item } = props
+  const options = {
+    hour: 'numeric',
+    minute: 'numeric'
+  }
+  const startTime = item.startTime.toDate()
+  const endTime = item.startTime.toDate()
+  endTime.setHours(startTime.getHours() + parseInt(item.duration))
 
   return (
     <View>
       <View style={styles.itineraryItemContainter}>
         <View style={styles.destinationTimeContainter}>
-          <Text style={styles.destinationTimeText}>13:30</Text>
+          <Text style={styles.destinationTimeText}>
+            {startTime.toLocaleTimeString('en-EN', options)}
+          </Text>
           <FontAwesome5
             name='map-marker-alt'
             size={40}
             color={secondaryColor}
           />
-          <Text style={styles.destinationTimeText}>13:30</Text>
+          <Text style={styles.destinationTimeText}>
+            {endTime.toLocaleTimeString('en-EN', options)}
+          </Text>
         </View>
         <TouchableOpacity style={styles.destinationCardContainter}>
-          <Text style={styles.destinationCardDuration}>2H</Text>
-          <Text style={styles.destinationCardTitle}>Destination</Text>
-          <Text style={styles.destinationCardAddress}>Address</Text>
+          <Text
+            style={styles.destinationCardDuration}
+          >{`${item.duration}H`}</Text>
+          <Text style={styles.destinationCardTitle}>{item.destination}</Text>
+          <Text style={styles.destinationCardAddress} numberOfLines={1}>
+            {item.address}
+          </Text>
           <Text style={styles.destinationCardNotes} numberOfLines={1}>
-            Notes NotesNotesNotesNotesNotesNotesNotes
+            {item.notes}
           </Text>
         </TouchableOpacity>
       </View>

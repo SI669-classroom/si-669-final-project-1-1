@@ -79,7 +79,6 @@ export default function ImagePickerComponent (props) {
 
   const handleLocalImageUpload = async () => {
     const imgData = await uploadImageFromDevice()
-    console.log(imgData.imgURI, imgData.imgName)
     if (imgData.imgURI) {
       setImageURI(imgData.imgURI)
       onGetImg(imgData.imgName)
