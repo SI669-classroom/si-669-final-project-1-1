@@ -39,43 +39,51 @@ function TripsHomeScreen (props) {
       <View style={[styles.header, styles.withDividerBelow]}>
         <Text style={styles.headerText}>Trips</Text>
       </View>
-      <View style={[styles.personalInfoContainer, styles.withDividerBelow]}>
-        <Avatar
-          size={72}
-          rounded
-          title={
-            currentUser
-              ? currentUser.displayName.substr(0, 2).toUpperCase()
-              : 'N/A'
-          }
-          containerStyle={{ backgroundColor: secondaryColor }}
-        />
-        <View style={styles.personalInfoSubContainer}>
-          {currentUser ? (
-            <>
-              <Text style={styles.personalInfoMainText}>
-                {currentUser.displayName}
-              </Text>
-              <Text style={styles.personalInfoText}>{currentUser.email}</Text>
-            </>
-          ) : (
-            <Button
-              type='solid'
-              color={primaryColor}
-              buttonStyle={{ width: 150 }}
-              onPress={() => navigation.navigate('Login')}
-              title='LOGIN'
-            />
-          )}
+      <View style={styles.bodyContainer}>
+        <View style={[styles.personalInfoContainer, styles.withDividerBelow]}>
+          <Avatar
+            size={72}
+            rounded
+            title={
+              currentUser
+                ? currentUser.displayName.substr(0, 2).toUpperCase()
+                : 'N/A'
+            }
+            containerStyle={{ backgroundColor: secondaryColor }}
+          />
+          <View style={styles.personalInfoSubContainer}>
+            {currentUser ? (
+              <>
+                <Text style={styles.personalInfoMainText}>
+                  {currentUser.displayName}
+                </Text>
+                <Text style={styles.personalInfoText}>{currentUser.email}</Text>
+              </>
+            ) : (
+              <Button
+                type='solid'
+                color={primaryColor}
+                buttonStyle={{ width: 150 }}
+                onPress={() => navigation.navigate('Login')}
+                title='LOGIN'
+              />
+            )}
+          </View>
         </View>
-      </View>
-      <View style={styles.listContainer}>
-        <FlatList
-          data={trips}
-          renderItem={({ item, index }) => {
-            return <TripListItem item={item} index={index} navigation={navigation} />
-          }}
-        />
+        <View style={styles.listContainer}>
+          <FlatList
+            data={trips}
+            renderItem={({ item, index }) => {
+              return (
+                <TripListItem
+                  item={item}
+                  index={index}
+                  navigation={navigation}
+                />
+              )
+            }}
+          />
+        </View>
       </View>
       <TouchableOpacity
         style={[styles.footer, styles.withDividerTop]}

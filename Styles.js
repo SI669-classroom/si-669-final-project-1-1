@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1
   },
   bodyContainer: {
-    flex: 0.5,
+    flex: 0.8,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   avatarContainer: {},
   // TripMetaEdit
   metaEditContainer: {
-    flex: 1,
+    flex: 0.8,
     flexDirection: 'column',
     width: '100%',
     paddingTop: '5%',
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 0.9,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   panel: {
     flex: 1,
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 0,
     paddingVertical: 0,
-    width: '100%',
+    width: '100%'
   },
   itineraryListHeaderLeft: {
     justifyContent: 'center',
@@ -339,6 +339,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: '2%'
+  },
+  // packing list
+  packingListContainer: {
+    flex: 1,
+    width: '100%',
+    paddingTop: '5%'
+  },
+  packingListItem: {
+    backgroundColor: 'transparent',
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    width: 350,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  packingListCheckbox:{
+    backgroundColor: 'transparent',
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    width: '70%'
   }
 })
 

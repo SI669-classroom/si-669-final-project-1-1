@@ -21,33 +21,33 @@ function LoginScreen ({ navigation }) {
         ) : (
           <RegisterBox navigation={navigation} />
         )}
-      </View>
-      <View>
-        {loginMode ? (
-          <Text>
-            {'New user? '}
-            <Text
-              onPress={() => {
-                setLoginMode(!loginMode)
-              }}
-              style={styles.linkText}
-            >
-              Register
+        <View>
+          {loginMode ? (
+            <Text>
+              {'New user? '}
+              <Text
+                onPress={() => {
+                  setLoginMode(!loginMode)
+                }}
+                style={styles.linkText}
+              >
+                Register
+              </Text>
             </Text>
-          </Text>
-        ) : (
-          <Text>
-            {'Returning user? '}
-            <Text
-              onPress={() => {
-                setLoginMode(!loginMode)
-              }}
-              style={styles.linkText}
-            >
-              Login
+          ) : (
+            <Text>
+              {'Returning user? '}
+              <Text
+                onPress={() => {
+                  setLoginMode(!loginMode)
+                }}
+                style={styles.linkText}
+              >
+                Login
+              </Text>
             </Text>
-          </Text>
-        )}
+          )}
+        </View>
       </View>
     </View>
   )

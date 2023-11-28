@@ -92,7 +92,14 @@ function TripDetailsScreen (props) {
                   </View>
                 </View>
                 <View style={styles.tripDetailMetaInfoRow}>
-                  <TouchableOpacity style={styles.packingListButton}>
+                  <TouchableOpacity
+                    style={styles.packingListButton}
+                    onPress={() => {
+                      navigation.navigate('PackingList', {
+                        tripItem: item
+                      })
+                    }}
+                  >
                     <Text style={styles.packingListText}>Packing List</Text>
                   </TouchableOpacity>
                 </View>
@@ -102,7 +109,6 @@ function TripDetailsScreen (props) {
                 tripIdx={index}
                 navigation={navigation}
               />
-              
             </View>
           )}
         </SlidingUpPanel>
