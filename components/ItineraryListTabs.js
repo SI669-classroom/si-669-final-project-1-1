@@ -76,6 +76,17 @@ function DateRoute (props) {
   )
 }
 
+function AddRoute () {
+  return (
+    <View style={styles.bodyContainer}>
+      <TouchableOpacity style={styles.itineraryAdd}>
+        <Ionicons name='add-outline' size={24} color={primaryColor} />
+        <Text>Add Day</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
+
 function ItineraryListTabs (props) {
   const dispatch = useDispatch()
   const { itinerary, startDate, navigation } = props
@@ -85,25 +96,34 @@ function ItineraryListTabs (props) {
     day: 'numeric'
   }
   const layout = useWindowDimensions()
-
+  let r = itinerary.map((i, idx) => {
+    return {
+      key: idx,
+      title: `Day ${idx + 1}`
+    }
+  })
+  r = [...r, { key: 'add', title: '+' }]
   const [index, setIndex] = useState(0)
-  const [routes] = useState(
-    itinerary.map((i, idx) => {
-      return {
-        key: idx,
-        title: `Day ${idx + 1}`
-      }
-    })
-  )
+  const [routes] = useState(r)
 
   const renderScene = ({ route }) => {
-    return (
-      <DateRoute
-        itinerary={itinerary[route.key]}
-        idx={route.key}
-        startDate={startDate}
-      />
-    )
+    if (route.key === 'add') {
+      return (
+        <AddRoute
+          itinerary={itinerary[route.key]}
+          idx={route.key}
+          startDate={startDate}
+        />
+      )
+    } else {
+      return (
+        <DateRoute
+          itinerary={itinerary[route.key]}
+          idx={route.key}
+          startDate={startDate}
+        />
+      )
+    }
   }
 
   const renderTabBar = props => (
@@ -111,6 +131,8 @@ function ItineraryListTabs (props) {
       {...props}
       indicatorStyle={{ backgroundColor: grayscale }}
       style={{ backgroundColor: secondaryColor }}
+      scrollEnabled={true}
+      tabStyle={{ width: 70 }}
     />
   )
 

@@ -36,14 +36,6 @@ function TripDetailsScreen (props) {
   }
   const { height } = Dimensions.get('window')
 
-  const layout = useWindowDimensions()
-
-  const [index, setIndex] = useState(0)
-  const [routes] = useState([
-    { key: 'first', title: 'First' },
-    { key: 'second', title: 'Second' }
-  ])
-
   return (
     <View style={styles.container}>
       <View style={[styles.header, styles.withDividerBelow]}>
