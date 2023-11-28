@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   // itinerary list
   itineraryListHeader: {
     justifyContent: 'center',
-    alignItems: 'space-between',
+    alignItems: 'center',
     flexDirection: 'row',
     paddingHorizontal: '5%',
     paddingVertical: '2%'

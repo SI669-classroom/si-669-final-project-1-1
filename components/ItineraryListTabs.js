@@ -9,6 +9,7 @@ import {
   useWindowDimensions
 } from 'react-native'
 import { Input, Button, Divider, Avatar } from '@rneui/themed'
+import DateTimePicker from '@react-native-community/datetimepicker'
 import { useSelector, useDispatch } from 'react-redux'
 import { Ionicons } from '@expo/vector-icons'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
@@ -24,11 +25,8 @@ import ItineraryListItem from './ItineraryListItem'
 import { getAuthUser } from '../AuthManager'
 
 function DateRoute (props) {
-  const { itinerary, idx, startDate } = props
-  const options = {
-    hour: 'numeric',
-    minute: 'numeric'
-  }
+  const { itinerary, idx, startDate, item } = props
+  const dispatch = useDispatch()
   const dateOptions = {
     month: 'short',
     day: 'numeric'
@@ -39,16 +37,52 @@ function DateRoute (props) {
   }
   const date = new Date(startDate)
   date.setDate(startDate.getDate() + idx)
+
+  const [time, setTime] = useState(itinerary.startTime.toDate())
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate
+    setTime(currentDate)
+    dispatch(
+      updateItem(item, {
+        ...item,
+        itinerary: item.itinerary.map((element, i) => {
+          if (i === idx) {
+            return {
+              destinations: {
+                ...element.destinations,
+                0: {
+                    ...element.destinations[0],
+                    startTime: Timestamp.fromDate(time)
+                }
+              },
+              startTime: Timestamp.fromDate(time)
+            }
+          } else {
+            return element
+          }
+        })
+      })
+    )
+  }
+
   return (
     <View>
       <View style={styles.itineraryListHeader}>
         <View style={styles.itineraryListHeaderLeft}>
           <Text style={{ color: 'white' }}>{`Day ${idx + 1}`}</Text>
         </View>
-        <TouchableOpacity style={styles.itineraryListHeaderCenter}>
-          <Text>{`${itinerary.startTime
-            .toDate()
-            .toLocaleTimeString('en-EN', options)}`}</Text>
+        <TouchableOpacity
+          style={styles.itineraryListHeaderCenter}
+          onPress={() => setShow(true)}
+        >
+          <DateTimePicker
+            testID='dateTimePicker'
+            value={time}
+            mode='time'
+            is24Hour={true}
+            onChange={onChange}
+          />
         </TouchableOpacity>
         <View style={styles.itineraryListHeaderRight}>
           <Text>{date.toLocaleDateString('en-EN', dateOptions)}</Text>
@@ -139,6 +173,7 @@ function ItineraryListTabs (props) {
           itinerary={itinerary[route.key]}
           idx={route.key}
           startDate={startDate}
+          item={currItem}
         />
       )
     }
