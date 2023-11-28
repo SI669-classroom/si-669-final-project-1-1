@@ -17,15 +17,15 @@ import { deleteItem } from '../data/Actions'
 
 function ItineraryListItem (props) {
   const dispatch = useDispatch()
-  const { item } = props
+  const { item, destination, dateIdx, tripIdx, navigation, prevDesIdx } = props
   const options = {
     hour: 'numeric',
     minute: 'numeric'
   }
-  const startTime = item.startTime.toDate()
-  const endTime = item.startTime.toDate()
-  endTime.setHours(startTime.getHours() + parseInt(item.duration))
-
+  const startTime = destination.startTime.toDate()
+  const endTime = destination.startTime.toDate()
+  endTime.setHours(startTime.getHours() + parseInt(destination.duration))
+  console.log(prevDesIdx)
   return (
     <View>
       <View style={styles.itineraryItemContainter}>
@@ -42,20 +42,43 @@ function ItineraryListItem (props) {
             {endTime.toLocaleTimeString('en-EN', options)}
           </Text>
         </View>
-        <TouchableOpacity style={styles.destinationCardContainter}>
+        <TouchableOpacity
+          style={styles.destinationCardContainter}
+          onPress={() => {
+            navigation.navigate('DestinationEdit', {
+              item: item,
+              destination: destination,
+              dateIdx: dateIdx,
+              tripIdx: tripIdx
+            })
+          }}
+        >
           <Text
             style={styles.destinationCardDuration}
-          >{`${item.duration}H`}</Text>
-          <Text style={styles.destinationCardTitle}>{item.destination}</Text>
+          >{`${destination.duration}H`}</Text>
+          <Text style={styles.destinationCardTitle}>
+            {destination.destination}
+          </Text>
           <Text style={styles.destinationCardAddress} numberOfLines={1}>
-            {item.address}
+            {destination.address}
           </Text>
           <Text style={styles.destinationCardNotes} numberOfLines={1}>
-            {item.notes}
+            {destination.notes}
           </Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.itineraryAdd}>
+      <TouchableOpacity
+        style={styles.itineraryAdd}
+        onPress={() => {
+          navigation.navigate('DestinationEdit', {
+            item: item,
+            destination: null,
+            dateIdx: dateIdx,
+            tripIdx: tripIdx,
+            prevDesIdx: prevDesIdx
+          })
+        }}
+      >
         <Ionicons name='add-outline' size={24} color={primaryColor} />
         <Text>Add Location</Text>
       </TouchableOpacity>

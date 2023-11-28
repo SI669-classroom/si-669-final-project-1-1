@@ -46,55 +46,65 @@ function TripDetailsScreen (props) {
         <SlidingUpPanel
           ref={c => (this._panel = c)}
           draggableRange={{ top: height / 1.25, bottom: 120 }}
-          animatedValue={this._draggedValue}
           showBackdrop={false}
+          height={height / 1.25}
         >
-          <View style={styles.panel}>
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <FontAwesome5
-                name='window-minimize'
-                size={24}
-                color={darkGrayscale}
-                onPress={() => this._panel.hide()}
-              />
-            </View>
-            <View style={styles.tripDetailMetaInfoContainer}>
-              <View style={styles.tripDetailMetaInfoRow}>
-                <Text style={styles.tripDetailTitleText}>{item.title}</Text>
+          {dragHandler => (
+            <View style={styles.panel}>
+              <View
+                style={{ justifyContent: 'center', alignItems: 'center' }}
+                {...dragHandler}
+              >
+                <FontAwesome5
+                  name='window-minimize'
+                  size={24}
+                  color={darkGrayscale}
+                  onPress={() => this._panel.hide()}
+                />
               </View>
-              <View style={styles.tripDetailMetaInfoRow}>
-                <Text
-                  style={styles.tripDetailTimeText}
-                >{`${item.startDate.toLocaleDateString(
-                  'en-EN',
-                  options
-                )} - ${item.endDate.toLocaleDateString(
-                  'en-EN',
-                  options
-                )}`}</Text>
-              </View>
-              <View style={styles.tripDetailMetaInfoRow}>
-                <View style={styles.avatarContainer}>
-                  <Avatar
-                    size={32}
-                    rounded
-                    icon={{
-                      name: 'add',
-                      type: 'MaterialIcons',
-                      color: secondaryColor
-                    }}
-                    containerStyle={{ backgroundColor: grayscale }}
-                  />
+              <View style={styles.tripDetailMetaInfoContainer}>
+                <View style={styles.tripDetailMetaInfoRow}>
+                  <Text style={styles.tripDetailTitleText}>{item.title}</Text>
+                </View>
+                <View style={styles.tripDetailMetaInfoRow}>
+                  <Text
+                    style={styles.tripDetailTimeText}
+                  >{`${item.startDate.toLocaleDateString(
+                    'en-EN',
+                    options
+                  )} - ${item.endDate.toLocaleDateString(
+                    'en-EN',
+                    options
+                  )}`}</Text>
+                </View>
+                <View style={styles.tripDetailMetaInfoRow}>
+                  <View style={styles.avatarContainer}>
+                    <Avatar
+                      size={32}
+                      rounded
+                      icon={{
+                        name: 'add',
+                        type: 'MaterialIcons',
+                        color: secondaryColor
+                      }}
+                      containerStyle={{ backgroundColor: grayscale }}
+                    />
+                  </View>
+                </View>
+                <View style={styles.tripDetailMetaInfoRow}>
+                  <TouchableOpacity style={styles.packingListButton}>
+                    <Text style={styles.packingListText}>Packing List</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-              <View style={styles.tripDetailMetaInfoRow}>
-                <TouchableOpacity style={styles.packingListButton}>
-                  <Text style={styles.packingListText}>Packing List</Text>
-                </TouchableOpacity>
-              </View>
+              <ItineraryListTabs
+                item={item}
+                tripIdx={index}
+                navigation={navigation}
+              />
+              
             </View>
-            <ItineraryListTabs item={item} idx={index} navigation={navigation} />
-          </View>
+          )}
         </SlidingUpPanel>
       </View>
     </View>

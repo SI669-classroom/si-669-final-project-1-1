@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 0.9,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   panel: {
     flex: 1,
@@ -267,6 +267,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: '5%',
     paddingVertical: '2%'
+  },
+  itineraryListBody: {
+    flexDirection: 'column',
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    width: '100%',
   },
   itineraryListHeaderLeft: {
     justifyContent: 'center',

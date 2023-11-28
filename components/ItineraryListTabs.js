@@ -25,7 +25,7 @@ import ItineraryListItem from './ItineraryListItem'
 import { getAuthUser } from '../AuthManager'
 
 function DateRoute (props) {
-  const { itinerary, idx, startDate, item } = props
+  const { itinerary, dateIdx, tripIdx, startDate, item, navigation } = props
   const dispatch = useDispatch()
   const dateOptions = {
     month: 'short',
@@ -36,27 +36,26 @@ function DateRoute (props) {
     destinations.push(value)
   }
   const date = new Date(startDate)
-  date.setDate(startDate.getDate() + idx)
+  date.setDate(startDate.getDate() + dateIdx)
 
   const [time, setTime] = useState(itinerary.startTime.toDate())
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate
-    setTime(currentDate)
+  const onChangeTime = (event, selectedDate) => {
+    setTime(selectedDate)
     dispatch(
       updateItem(item, {
         ...item,
         itinerary: item.itinerary.map((element, i) => {
-          if (i === idx) {
+          if (i === dateIdx) {
             return {
               destinations: {
                 ...element.destinations,
                 0: {
-                    ...element.destinations[0],
-                    startTime: Timestamp.fromDate(time)
+                  ...element.destinations[0],
+                  startTime: Timestamp.fromDate(selectedDate)
                 }
               },
-              startTime: Timestamp.fromDate(time)
+              startTime: Timestamp.fromDate(selectedDate)
             }
           } else {
             return element
@@ -70,7 +69,7 @@ function DateRoute (props) {
     <View>
       <View style={styles.itineraryListHeader}>
         <View style={styles.itineraryListHeaderLeft}>
-          <Text style={{ color: 'white' }}>{`Day ${idx + 1}`}</Text>
+          <Text style={{ color: 'white' }}>{`Day ${dateIdx + 1}`}</Text>
         </View>
         <TouchableOpacity
           style={styles.itineraryListHeaderCenter}
@@ -81,23 +80,45 @@ function DateRoute (props) {
             value={time}
             mode='time'
             is24Hour={true}
-            onChange={onChange}
+            onChange={onChangeTime}
           />
         </TouchableOpacity>
         <View style={styles.itineraryListHeaderRight}>
           <Text>{date.toLocaleDateString('en-EN', dateOptions)}</Text>
         </View>
       </View>
-      {destinations.length > 0 ? (
-        destinations.map((element, idx) => {
-          return <ItineraryListItem key={idx} item={element} />
-        })
-      ) : (
-        <TouchableOpacity style={styles.itineraryAdd}>
+      <ScrollView contentContainerStyle={styles.itineraryListBody}>
+        <TouchableOpacity
+          style={styles.itineraryAdd}
+          onPress={() => {
+            navigation.navigate('DestinationEdit', {
+              item: item,
+              destination: null,
+              dateIdx: dateIdx,
+              tripIdx: tripIdx,
+              prevDesIdx: 0
+            })
+          }}
+        >
           <Ionicons name='add-outline' size={24} color={primaryColor} />
           <Text>Add Location</Text>
         </TouchableOpacity>
-      )}
+        {destinations.length > 0 &&
+          destinations.map((element, i) => {
+            return (
+              <ItineraryListItem
+                key={i}
+                item={item}
+                destination={element}
+                dateIdx={dateIdx}
+                tripIdx={tripIdx}
+                navigation={navigation}
+                prevDesIdx={i}
+              />
+            )
+          })}
+        <View style={[styles.footer, { paddingBottom: '20%' }]}></View>
+      </ScrollView>
     </View>
   )
 }
@@ -133,7 +154,7 @@ function AddRoute (props) {
 
 function ItineraryListTabs (props) {
   const dispatch = useDispatch()
-  const { item, idx, navigation } = props
+  const { item, tripIdx, navigation } = props
   const trips = useSelector(state => state.trips)
   const layout = useWindowDimensions()
   let r = item.itinerary.map((e, i) => {
@@ -151,10 +172,14 @@ function ItineraryListTabs (props) {
   useEffect(() => {
     let currUser = getAuthUser()
     dispatch(load(currUser.uid))
-    setCurrItem(trips[idx])
-    setItinerary(trips[idx].itinerary)
-    setStartDate(trips[idx].startDate)
-    r = trips[idx].itinerary.map((e, i) => {
+    if (!trips[tripIdx]) {
+      return
+    }
+    setCurrItem(trips[tripIdx])
+    setItinerary(trips[tripIdx].itinerary)
+    setStartDate(trips[tripIdx].startDate)
+    console.log(trips)
+    r = trips[tripIdx].itinerary.map((e, i) => {
       return {
         key: i,
         title: `Day ${i + 1}`
@@ -171,9 +196,11 @@ function ItineraryListTabs (props) {
       return (
         <DateRoute
           itinerary={itinerary[route.key]}
-          idx={route.key}
+          dateIdx={route.key}
+          tripIdx={tripIdx}
           startDate={startDate}
           item={currItem}
+          navigation={navigation}
         />
       )
     }
