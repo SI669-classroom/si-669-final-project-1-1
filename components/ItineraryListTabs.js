@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   TouchableWithoutFeedback,
   View,
@@ -6,30 +6,22 @@ import {
   Text,
   TouchableOpacity,
   Keyboard,
-  Dimensions,
-  Animated,
   useWindowDimensions
 } from 'react-native'
 import { Input, Button, Divider, Avatar } from '@rneui/themed'
 import { useSelector, useDispatch } from 'react-redux'
-import {
-  AntDesign,
-  Ionicons,
-  FontAwesome,
-  MaterialCommunityIcons,
-  FontAwesome5,
-  MaterialIcons
-} from '@expo/vector-icons'
-import SlidingUpPanel from 'rn-sliding-up-panel'
+import { Ionicons } from '@expo/vector-icons'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
+import { Timestamp } from 'firebase/firestore'
 import styles, {
   darkGrayscale,
   grayscale,
   primaryColor,
   secondaryColor
 } from '../Styles'
-import { addItem, updateItem, deleteItem } from '../data/Actions'
+import { addItem, updateItem, deleteItem, load } from '../data/Actions'
 import ItineraryListItem from './ItineraryListItem'
+import { getAuthUser } from '../AuthManager'
 
 function DateRoute (props) {
   const { itinerary, idx, startDate } = props
@@ -76,10 +68,28 @@ function DateRoute (props) {
   )
 }
 
-function AddRoute () {
+function AddRoute (props) {
+  const { item } = props
+  const dispatch = useDispatch()
   return (
     <View style={styles.bodyContainer}>
-      <TouchableOpacity style={styles.itineraryAdd}>
+      <TouchableOpacity
+        style={styles.itineraryAdd}
+        onPress={() => {
+          dispatch(
+            updateItem(item, {
+              ...item,
+              itinerary: [
+                ...item.itinerary,
+                {
+                  destinations: {},
+                  startTime: Timestamp.fromDate(new Date(2023, 12, 1, 8, 0))
+                }
+              ]
+            })
+          )
+        }}
+      >
         <Ionicons name='add-outline' size={24} color={primaryColor} />
         <Text>Add Day</Text>
       </TouchableOpacity>
@@ -89,32 +99,40 @@ function AddRoute () {
 
 function ItineraryListTabs (props) {
   const dispatch = useDispatch()
-  const { itinerary, startDate, navigation } = props
-  const options = {
-    weekday: 'long',
-    month: 'short',
-    day: 'numeric'
-  }
+  const { item, idx, navigation } = props
+  const trips = useSelector(state => state.trips)
   const layout = useWindowDimensions()
-  let r = itinerary.map((i, idx) => {
+  let r = item.itinerary.map((e, i) => {
     return {
-      key: idx,
-      title: `Day ${idx + 1}`
+      key: i,
+      title: `Day ${i + 1}`
     }
   })
   r = [...r, { key: 'add', title: '+' }]
   const [index, setIndex] = useState(0)
-  const [routes] = useState(r)
+  const [routes, setRoutes] = useState(r)
+  const [itinerary, setItinerary] = useState(item.itinerary)
+  const [startDate, setStartDate] = useState(item.startDate)
+  const [currItem, setCurrItem] = useState(item)
+  useEffect(() => {
+    let currUser = getAuthUser()
+    dispatch(load(currUser.uid))
+    setCurrItem(trips[idx])
+    setItinerary(trips[idx].itinerary)
+    setStartDate(trips[idx].startDate)
+    r = trips[idx].itinerary.map((e, i) => {
+      return {
+        key: i,
+        title: `Day ${i + 1}`
+      }
+    })
+    r = [...r, { key: 'add', title: '+' }]
+    setRoutes(r)
+  }, [trips])
 
   const renderScene = ({ route }) => {
     if (route.key === 'add') {
-      return (
-        <AddRoute
-          itinerary={itinerary[route.key]}
-          idx={route.key}
-          startDate={startDate}
-        />
-      )
+      return <AddRoute item={currItem} />
     } else {
       return (
         <DateRoute

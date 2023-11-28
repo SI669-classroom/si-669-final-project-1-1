@@ -72,8 +72,8 @@ function TripsHomeScreen (props) {
       <View style={styles.listContainer}>
         <FlatList
           data={trips}
-          renderItem={({ item }) => {
-            return <TripListItem item={item} navigation={navigation} />
+          renderItem={({ item, index }) => {
+            return <TripListItem item={item} index={index} navigation={navigation} />
           }}
         />
       </View>

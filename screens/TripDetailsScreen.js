@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   TouchableWithoutFeedback,
   View,
@@ -22,13 +22,14 @@ import {
 } from '@expo/vector-icons'
 import SlidingUpPanel from 'rn-sliding-up-panel'
 import styles, { darkGrayscale, grayscale, secondaryColor } from '../Styles'
-import { addItem, updateItem, deleteItem } from '../data/Actions'
+import { addItem, updateItem, deleteItem, load } from '../data/Actions'
 import ItineraryListTabs from '../components/ItineraryListTabs'
+import { getAuthUser } from '../AuthManager'
 
 function TripDetailsScreen (props) {
   const dispatch = useDispatch()
   const { navigation, route } = props
-  const { item } = route.params
+  const { item, index } = route.params
   const options = {
     weekday: 'long',
     month: 'short',
@@ -92,7 +93,7 @@ function TripDetailsScreen (props) {
                 </TouchableOpacity>
               </View>
             </View>
-            <ItineraryListTabs itinerary={item.itinerary} startDate={item.startDate} navigation={navigation} />
+            <ItineraryListTabs item={item} idx={index} navigation={navigation} />
           </View>
         </SlidingUpPanel>
       </View>

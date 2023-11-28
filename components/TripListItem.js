@@ -16,7 +16,7 @@ import styles, { grayscale, secondaryColor } from '../Styles'
 import { deleteItem } from '../data/Actions'
 
 function TripListItem (props) {
-  const { item, navigation } = props
+  const { item, index, navigation } = props
   const options = {
     weekday: 'long',
     month: 'short',
@@ -39,7 +39,8 @@ function TripListItem (props) {
         style={styles.tripListItemContainter}
         onPress={() => {
           navigation.navigate('TripDetails', {
-            item: item
+            item: item,
+            index: index
           })
         }}
       >
