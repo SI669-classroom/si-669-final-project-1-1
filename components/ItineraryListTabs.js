@@ -71,10 +71,7 @@ function DateRoute (props) {
         <View style={styles.itineraryListHeaderLeft}>
           <Text style={{ color: 'white' }}>{`Day ${dateIdx + 1}`}</Text>
         </View>
-        <TouchableOpacity
-          style={styles.itineraryListHeaderCenter}
-          onPress={() => setShow(true)}
-        >
+        <TouchableOpacity style={styles.itineraryListHeaderCenter}>
           <DateTimePicker
             testID='dateTimePicker'
             value={time}
@@ -113,7 +110,7 @@ function DateRoute (props) {
                 dateIdx={dateIdx}
                 tripIdx={tripIdx}
                 navigation={navigation}
-                prevDesIdx={i}
+                prevDesIdx={i + 1}
               />
             )
           })}
@@ -169,6 +166,7 @@ function ItineraryListTabs (props) {
   const [itinerary, setItinerary] = useState(item.itinerary)
   const [startDate, setStartDate] = useState(item.startDate)
   const [currItem, setCurrItem] = useState(item)
+
   useEffect(() => {
     let currUser = getAuthUser()
     dispatch(load(currUser.uid))
@@ -178,7 +176,6 @@ function ItineraryListTabs (props) {
     setCurrItem(trips[tripIdx])
     setItinerary(trips[tripIdx].itinerary)
     setStartDate(trips[tripIdx].startDate)
-    console.log(trips)
     r = trips[tripIdx].itinerary.map((e, i) => {
       return {
         key: i,
@@ -187,7 +184,7 @@ function ItineraryListTabs (props) {
     })
     r = [...r, { key: 'add', title: '+' }]
     setRoutes(r)
-  }, [trips])
+  }, [trips[tripIdx]])
 
   const renderScene = ({ route }) => {
     if (route.key === 'add') {

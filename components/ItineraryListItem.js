@@ -25,7 +25,6 @@ function ItineraryListItem (props) {
   const startTime = destination.startTime.toDate()
   const endTime = destination.startTime.toDate()
   endTime.setHours(startTime.getHours() + parseInt(destination.duration))
-  console.log(prevDesIdx)
   return (
     <View>
       <View style={styles.itineraryItemContainter}>

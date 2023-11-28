@@ -41,7 +41,57 @@ function DestinationEditScreen (props) {
     !destination ? '' : destination.address
   )
 
-  let currUser = getAuthUser()
+  const destinationsNewOrderUpdate = (action, pos) => {
+    let newDestinations = {}
+    for (const [key, value] of Object.entries(
+      item.itinerary[dateIdx].destinations
+    )) {
+      if (parseInt(key) <= pos) {
+        newDestinations[key] = value
+      } else {
+        if (action === 'insert') {
+          const newKey = (parseInt(key) + 1).toString()
+          newDestinations[newKey] = {
+            ...value,
+            key: newKey
+          }
+        }
+        if (action === 'delete' && parseInt(key) + 1 > pos) {
+          const newKey = (parseInt(key) - 1).toString()
+          newDestinations[newKey] = {
+            ...value,
+            key: newKey
+          }
+        }
+      }
+    }
+    if (action === 'insert') {
+      newDestinations[(pos + 1).toString()] = {
+        address: address,
+        destination: title,
+        duration: duration.toString(),
+        notes: notes,
+        startTime: item.itinerary[dateIdx].startTime,
+        key: (pos + 1).toString()
+      }
+    }
+
+    dispatch(
+      updateItem(item, {
+        ...item,
+        itinerary: item.itinerary.map((element, i) => {
+          if (i === dateIdx) {
+            return {
+              ...element,
+              destinations: newDestinations
+            }
+          } else {
+            return element
+          }
+        })
+      })
+    )
+  }
 
   const save = () => {
     if (title === '') {
@@ -74,44 +124,7 @@ function DestinationEditScreen (props) {
           })
         )
       } else {
-        let newDestinations = {}
-        for (const [key, value] of Object.entries(
-          item.itinerary[dateIdx].destinations
-        )) {
-          console.log(`${key}: ${value}`)
-          if (parseInt(key) <= prevDesIdx) {
-            newDestinations[key] = value
-          } else {
-            newDestinations[(parseInt(key) + 1).toString()] = {
-              ...value,
-              key: (parseInt(key) + 1).toString()
-            }
-          }
-        }
-        newDestinations[(prevDesIdx + 1).toString()] = {
-          address: address,
-          destination: title,
-          duration: duration.toString(),
-          notes: notes,
-          startTime: item.itinerary[dateIdx].startTime,
-          key: (prevDesIdx + 1).toString()
-        }
-
-        dispatch(
-          updateItem(item, {
-            ...item,
-            itinerary: item.itinerary.map((element, i) => {
-              if (i === dateIdx) {
-                return {
-                  ...element,
-                  destinations: newDestinations
-                }
-              } else {
-                return element
-              }
-            })
-          })
-        )
+        destinationsNewOrderUpdate('insert', prevDesIdx)
       }
       navigation.navigate('TripDetails', {
         item: item,
@@ -170,6 +183,29 @@ function DestinationEditScreen (props) {
               />
             </View>
           </View>
+          {destination && (
+            <TouchableOpacity
+              style={[
+                styles.metaEditFieldContainer,
+                { alignItems: 'center', justifyContent: 'center' }
+              ]}
+              onPress={() => {
+                destinationsNewOrderUpdate(
+                  'delete',
+                  parseInt(destination.key)
+                )
+                navigation.navigate('TripDetails', {
+                  item: item,
+                  index: tripIdx
+                })
+              }}
+            >
+              <Ionicons name='md-trash-sharp' size={24} color='red' />
+              <Text style={[styles.metaEditFieldLabel, { marginLeft: '2%' }]}>
+                Delete this Destination
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
         <View style={[styles.footer, styles.withDividerTop]}>
           <TouchableOpacity onPress={save}>
