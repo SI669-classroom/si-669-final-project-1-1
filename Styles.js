@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     flex: 0.1,
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     width: '100%',
@@ -353,13 +353,19 @@ const styles = StyleSheet.create({
     width: 350,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-  packingListCheckbox:{
+  packingListCheckbox: {
     backgroundColor: 'transparent',
     paddingVertical: 0,
     paddingHorizontal: 0,
     width: '70%'
+  },
+  overlayContainer: {
+    width: '80%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: '5%'
   }
 })
 

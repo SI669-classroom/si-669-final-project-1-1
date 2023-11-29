@@ -8,7 +8,7 @@ import {
   FlatList,
   ScrollView
 } from 'react-native'
-import { Input, Button, Divider, CheckBox } from '@rneui/themed'
+import { Input, Button, Overlay, CheckBox } from '@rneui/themed'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   AntDesign,
@@ -25,6 +25,23 @@ function PackingListScreen (props) {
   const { navigation, route } = props
   const { tripItem } = route.params
   const [packingList, setPackingList] = useState(tripItem.packingList)
+  const [visible, setVisible] = useState(false)
+  const [packingItemName, setPackingItemName] = useState('')
+  const [currItemIdx, setCurrItemIdx] = useState(-1)
+
+  const toggleOverlay = () => {
+    setVisible(!visible)
+  }
+
+  const updatePackingList = newPackingList => {
+    setPackingList(newPackingList)
+    dispatch(
+      updateItem(tripItem, {
+        ...tripItem,
+        packingList: newPackingList
+      })
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -52,13 +69,7 @@ function PackingListScreen (props) {
                           return elm
                         }
                       })
-                      setPackingList(newPackingList)
-                      dispatch(
-                        updateItem(tripItem, {
-                          ...tripItem,
-                          packingList: newPackingList
-                        })
-                      )
+                      updatePackingList(newPackingList)
                     }}
                     iconType='material-community'
                     checkedIcon='checkbox-marked'
@@ -66,7 +77,13 @@ function PackingListScreen (props) {
                     checkedColor={primaryColor}
                     containerStyle={styles.packingListCheckbox}
                   />
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setCurrItemIdx(index)
+                      setPackingItemName(item.name)
+                      toggleOverlay()
+                    }}
+                  >
                     <FontAwesome5
                       name='pencil-alt'
                       size={20}
@@ -88,14 +105,66 @@ function PackingListScreen (props) {
       </View>
       <TouchableOpacity
         style={[styles.footer, styles.withDividerTop]}
-        onPress={() => {
-          navigation.navigate('TripMetaEdit', {
-            item: { key: -1 }
-          })
-        }}
+        onPress={toggleOverlay}
       >
         <MaterialIcons name='add-circle' size={40} color={primaryColor} />
       </TouchableOpacity>
+      <Overlay
+        isVisible={visible}
+        onBackdropPress={toggleOverlay}
+        overlayStyle={styles.overlayContainer}
+      >
+        <Text style={styles.metaEditFieldLabel}>
+          {currItemIdx === -1 ? 'New List Item' : 'Edit List Item'}
+        </Text>
+        <View style={styles.metaEditFieldContainer}>
+          <Text style={styles.metaEditFieldLabel}>Item Name: </Text>
+          <View style={styles.metaEditField}>
+            <Input
+              placeholder='Enter Item Name'
+              value={packingItemName}
+              onChangeText={text => {
+                setPackingItemName(text)
+              }}
+            />
+          </View>
+        </View>
+        <Button
+          type='solid'
+          color={primaryColor}
+          buttonStyle={{ width: 150 }}
+          onPress={() => {
+            let newPackingList = []
+            if (currItemIdx === -1) {
+              // new
+              newPackingList = [
+                ...packingList,
+                {
+                  name: packingItemName,
+                  checked: false
+                }
+              ]
+            } else {
+              // update
+              newPackingList = packingList.map((elm, idx) => {
+                if (idx === currItemIdx) {
+                  return {
+                    ...elm,
+                    name: packingItemName
+                  }
+                } else {
+                  return elm
+                }
+              })
+            }
+            updatePackingList(newPackingList)
+            setCurrItemIdx(-1)
+            setPackingItemName('')
+            toggleOverlay()
+          }}
+          title='SAVE'
+        />
+      </Overlay>
     </View>
   )
 }
