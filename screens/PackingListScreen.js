@@ -90,7 +90,14 @@ function PackingListScreen (props) {
                       color={primaryColor}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      let newPackingList = packingList.filter(
+                        (elm, idx) => idx !== index
+                      )
+                      updatePackingList(newPackingList)
+                    }}
+                  >
                     <Ionicons
                       name='md-trash-sharp'
                       size={24}
