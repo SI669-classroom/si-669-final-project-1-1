@@ -50,8 +50,8 @@ function DateRoute (props) {
             return {
               destinations: {
                 ...element.destinations,
-                0: {
-                  ...element.destinations[0],
+                1: {
+                  ...element.destinations[1],
                   startTime: Timestamp.fromDate(selectedDate)
                 }
               },
@@ -163,19 +163,13 @@ function ItineraryListTabs (props) {
   r = [...r, { key: 'add', title: '+' }]
   const [index, setIndex] = useState(0)
   const [routes, setRoutes] = useState(r)
-  const [itinerary, setItinerary] = useState(item.itinerary)
-  const [startDate, setStartDate] = useState(item.startDate)
   const [currItem, setCurrItem] = useState(item)
 
   useEffect(() => {
-    let currUser = getAuthUser()
-    dispatch(load(currUser.uid))
     if (!trips[tripIdx]) {
       return
     }
     setCurrItem(trips[tripIdx])
-    setItinerary(trips[tripIdx].itinerary)
-    setStartDate(trips[tripIdx].startDate)
     r = trips[tripIdx].itinerary.map((e, i) => {
       return {
         key: i,
@@ -184,7 +178,7 @@ function ItineraryListTabs (props) {
     })
     r = [...r, { key: 'add', title: '+' }]
     setRoutes(r)
-  }, [trips[tripIdx]])
+  }, [trips[tripIdx].itinerary])
 
   const renderScene = ({ route }) => {
     if (route.key === 'add') {
@@ -192,10 +186,10 @@ function ItineraryListTabs (props) {
     } else {
       return (
         <DateRoute
-          itinerary={itinerary[route.key]}
+          itinerary={currItem.itinerary[route.key]}
           dateIdx={route.key}
           tripIdx={tripIdx}
-          startDate={startDate}
+          startDate={currItem.startDate}
           item={currItem}
           navigation={navigation}
         />

@@ -16,6 +16,7 @@ import {
 import { firebaseConfig } from '../Secrets'
 import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, LOAD } from './Reducer'
 import { manageFileDownload } from './Storage'
+import { getAuthUser } from '../AuthManager'
 
 let app
 const apps = getApps()
@@ -84,7 +85,7 @@ const load = currUid => {
         collection(db, 'TripsMeta'),
         where('owner', '==', currUid)
       )
-      let querySnapshotContacts = await getDocs(collection(db, 'TripsMeta'))
+      let querySnapshotContacts = await getDocs(q)
       newTrips = await Promise.all(
         querySnapshotContacts.docs.map(async docSnap => {
           let uri = await manageFileDownload(docSnap.data().cover)
@@ -93,7 +94,9 @@ const load = currUid => {
             key: docSnap.id,
             uri: uri,
             endDate: docSnap.data().endDate.toDate(),
-            startDate: docSnap.data().startDate.toDate()
+            startDate: docSnap.data().startDate.toDate(),
+            itinerary: docSnap.data().itinerary ? docSnap.data().itinerary : [],
+            packingList: docSnap.data().packingList ? docSnap.data().packingList : []
           }
         })
       )

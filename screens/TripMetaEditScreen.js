@@ -57,7 +57,9 @@ function TripMetaEditScreen (props) {
             uri: imageUri,
             startDate: start,
             endDate: end,
-            owner: currUser.uid
+            owner: currUser.uid,
+            itinerary: [],
+            packingList: []
           })
         )
       } else {

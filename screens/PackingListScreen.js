@@ -46,7 +46,7 @@ function PackingListScreen (props) {
   return (
     <View style={styles.container}>
       <View style={[styles.header, styles.withDividerBelow]}>
-        <Text style={styles.headerText}>Trips</Text>
+        <Text style={styles.headerText}>Packing List</Text>
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.packingListContainer}>

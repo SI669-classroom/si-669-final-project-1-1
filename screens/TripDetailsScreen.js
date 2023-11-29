@@ -30,12 +30,21 @@ function TripDetailsScreen (props) {
   const dispatch = useDispatch()
   const { navigation, route } = props
   const { item, index } = route.params
+  const trips = useSelector(state => state.trips)
   const options = {
     weekday: 'long',
     month: 'short',
     day: 'numeric'
   }
   const { height } = Dimensions.get('window')
+  const [currItem, setCurrItem] = useState(item)
+
+  useEffect(() => {
+    if (!trips[index]) {
+      return
+    }
+    setCurrItem(trips[index])
+  }, [trips[index]])
 
   return (
     <View style={styles.container}>
@@ -64,15 +73,15 @@ function TripDetailsScreen (props) {
               </View>
               <View style={styles.tripDetailMetaInfoContainer}>
                 <View style={styles.tripDetailMetaInfoRow}>
-                  <Text style={styles.tripDetailTitleText}>{item.title}</Text>
+                  <Text style={styles.tripDetailTitleText}>{currItem.title}</Text>
                 </View>
                 <View style={styles.tripDetailMetaInfoRow}>
                   <Text
                     style={styles.tripDetailTimeText}
-                  >{`${item.startDate.toLocaleDateString(
+                  >{`${currItem.startDate.toLocaleDateString(
                     'en-EN',
                     options
-                  )} - ${item.endDate.toLocaleDateString(
+                  )} - ${currItem.endDate.toLocaleDateString(
                     'en-EN',
                     options
                   )}`}</Text>
@@ -96,7 +105,7 @@ function TripDetailsScreen (props) {
                     style={styles.packingListButton}
                     onPress={() => {
                       navigation.navigate('PackingList', {
-                        tripItem: item
+                        tripItem: currItem
                       })
                     }}
                   >
@@ -105,7 +114,7 @@ function TripDetailsScreen (props) {
                 </View>
               </View>
               <ItineraryListTabs
-                item={item}
+                item={currItem}
                 tripIdx={index}
                 navigation={navigation}
               />
