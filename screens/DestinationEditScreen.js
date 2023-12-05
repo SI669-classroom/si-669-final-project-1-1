@@ -18,6 +18,7 @@ import {
   FontAwesome5,
   Entypo
 } from '@expo/vector-icons'
+import { Timestamp } from 'firebase/firestore'
 import styles, { primaryColor } from '../Styles'
 import { addItem, updateItem, deleteItem } from '../data/Actions'
 import ImagePickerComponent from '../components/ImagePicker'
@@ -41,14 +42,36 @@ function DestinationEditScreen (props) {
     !destination ? '' : destination.address
   )
 
+  const syncStartTimeWithDuration = (destinations) => {
+    for (const [key, value] of Object.entries(destinations)) {
+      if (key === '1') {
+        continue
+      } else {
+        newStartTime =
+        destinations[(parseInt(key) - 1).toString()].startTime.toDate()
+        newStartTime.setHours(
+          newStartTime.getHours() +
+            parseInt(destinations[(parseInt(key) - 1).toString()].duration)
+        )
+        destinations[key] = {
+          ...value,
+          startTime: Timestamp.fromDate(newStartTime)
+        }
+      }
+    }
+    return destinations
+  }
+
   const destinationsNewOrderUpdate = (action, pos) => {
     let newDestinations = {}
     for (const [key, value] of Object.entries(
       item.itinerary[dateIdx].destinations
     )) {
-      if (parseInt(key) <= pos) {
+      if (parseInt(key) < pos) {
         newDestinations[key] = value
-      } else {
+      } else if (parseInt(key) === pos && action === 'insert') {
+        newDestinations[key] = value
+      } else if (parseInt(key) > pos) {
         if (action === 'insert') {
           const newKey = (parseInt(key) + 1).toString()
           newDestinations[newKey] = {
@@ -75,7 +98,7 @@ function DestinationEditScreen (props) {
         key: (pos + 1).toString()
       }
     }
-
+    newDestinations = syncStartTimeWithDuration(newDestinations)
     dispatch(
       updateItem(item, {
         ...item,
@@ -103,19 +126,21 @@ function DestinationEditScreen (props) {
             ...item,
             itinerary: item.itinerary.map((element, i) => {
               if (i === dateIdx) {
+                newDestinations = {
+                  ...element.destinations,
+                  [destination.key]: {
+                    address: address,
+                    destination: title,
+                    duration: duration.toString(),
+                    notes: notes,
+                    startTime: element.startTime,
+                    key: destination.key
+                  }
+                }
+                newDestinations = syncStartTimeWithDuration(newDestinations)
                 return {
                   ...element,
-                  destinations: {
-                    ...element.destinations,
-                    [destination.key]: {
-                      address: address,
-                      destination: title,
-                      duration: duration.toString(),
-                      notes: notes,
-                      startTime: element.startTime,
-                      key: destination.key
-                    }
-                  }
+                  destinations: newDestinations
                 }
               } else {
                 return element
@@ -190,10 +215,7 @@ function DestinationEditScreen (props) {
                 { alignItems: 'center', justifyContent: 'center' }
               ]}
               onPress={() => {
-                destinationsNewOrderUpdate(
-                  'delete',
-                  parseInt(destination.key)
-                )
+                destinationsNewOrderUpdate('delete', parseInt(destination.key))
                 navigation.navigate('TripDetails', {
                   item: item,
                   index: tripIdx

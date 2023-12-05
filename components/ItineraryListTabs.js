@@ -40,6 +40,26 @@ function DateRoute (props) {
 
   const [time, setTime] = useState(itinerary.startTime.toDate())
 
+  const syncStartTimeWithDuration = (destinations) => {
+    for (const [key, value] of Object.entries(destinations)) {
+      if (key === '1') {
+        continue
+      } else {
+        newStartTime =
+        destinations[(parseInt(key) - 1).toString()].startTime.toDate()
+        newStartTime.setHours(
+          newStartTime.getHours() +
+            parseInt(destinations[(parseInt(key) - 1).toString()].duration)
+        )
+        destinations[key] = {
+          ...value,
+          startTime: Timestamp.fromDate(newStartTime)
+        }
+      }
+    }
+    return destinations
+  }
+
   const onChangeTime = (event, selectedDate) => {
     setTime(selectedDate)
     dispatch(
@@ -47,14 +67,16 @@ function DateRoute (props) {
         ...item,
         itinerary: item.itinerary.map((element, i) => {
           if (i === dateIdx) {
+            newDestinations = {
+              ...element.destinations,
+              1: {
+                ...element.destinations[1],
+                startTime: Timestamp.fromDate(selectedDate)
+              }
+            }
+            newDestinations = syncStartTimeWithDuration(newDestinations)
             return {
-              destinations: {
-                ...element.destinations,
-                1: {
-                  ...element.destinations[1],
-                  startTime: Timestamp.fromDate(selectedDate)
-                }
-              },
+              destinations: newDestinations,
               startTime: Timestamp.fromDate(selectedDate)
             }
           } else {
