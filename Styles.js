@@ -139,16 +139,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
-    minHeight: '7%'
+    minHeight: '7%',
   },
   metaEditFieldLabel: {
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   metaEditField: {
     flex: 1,
     alignItems: 'flex-start',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   imageContainer: {
     width: '100%',
@@ -179,6 +179,22 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#3b5998'
+  },
+  searchResultsContainer: {
+    width: '100%',
+    height: 200,
+    backgroundColor: '#fff',
+    position: 'absolute',
+    top: 50,
+    zIndex: 10
+  },
+  resultItem: {
+    width: '100%',
+    justifyContent: 'center',
+    height: 40,
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    paddingLeft: 15
   },
   // login
   loginContainer: {

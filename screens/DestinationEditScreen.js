@@ -6,7 +6,8 @@ import {
   Text,
   TouchableOpacity,
   Keyboard,
-  Image
+  Image,
+  FlatList
 } from 'react-native'
 import { Input, Button, Divider } from '@rneui/themed'
 import { useSelector, useDispatch } from 'react-redux'
@@ -23,7 +24,11 @@ import styles, { primaryColor } from '../Styles'
 import { addItem, updateItem, deleteItem } from '../data/Actions'
 import ImagePickerComponent from '../components/ImagePicker'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { getAuthUser } from '../AuthManager'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import axios from 'axios'
+import { GOOGLE_API_KEY } from '../Secrets'
 
 function DestinationEditScreen (props) {
   const dispatch = useDispatch()
@@ -41,14 +46,33 @@ function DestinationEditScreen (props) {
   const [address, setAddress] = useState(
     !destination ? '' : destination.address
   )
+  const [searchResults, setSearchResults] = useState(null)
+  const [isShowingResults, setIsShowingResults] = useState(false)
 
-  const syncStartTimeWithDuration = (destinations) => {
+  const searchLocation = async text => {
+    setTitle(text)
+    axios
+      .request({
+        method: 'post',
+        url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${GOOGLE_API_KEY}&input=${text}`
+      })
+      .then(response => {
+        console.log(response.data)
+        setSearchResults(response.data.predictions)
+        setIsShowingResults(true)
+      })
+      .catch(e => {
+        console.log(e.response)
+      })
+  }
+
+  const syncStartTimeWithDuration = destinations => {
     for (const [key, value] of Object.entries(destinations)) {
       if (key === '1') {
         continue
       } else {
         newStartTime =
-        destinations[(parseInt(key) - 1).toString()].startTime.toDate()
+          destinations[(parseInt(key) - 1).toString()].startTime.toDate()
         newStartTime.setHours(
           newStartTime.getHours() +
             parseInt(destinations[(parseInt(key) - 1).toString()].duration)
@@ -167,13 +191,45 @@ function DestinationEditScreen (props) {
           </Text>
         </View>
         <View style={styles.metaEditContainer}>
-          <View style={styles.metaEditFieldContainer}>
+          <View style={[styles.metaEditFieldContainer, { zIndex: 10 }]}>
             <Text style={styles.metaEditFieldLabel}>Name: </Text>
-            <View style={styles.metaEditField}>
+            <View style={[styles.metaEditField, { zIndex: 10 }]}>
               <Input
                 placeholder='Enter Destination Name'
                 value={title}
-                onChangeText={text => setTitle(text)}
+                onChangeText={text => searchLocation(text)}
+              />
+              {isShowingResults && (
+                <FlatList
+                  data={searchResults}
+                  renderItem={({ item, index }) => {
+                    return (
+                      <TouchableOpacity
+                        style={styles.resultItem}
+                        onPress={() => {
+                          setTitle(item.structured_formatting.main_text)
+                          setAddress(item.structured_formatting.secondary_text)
+                          setIsShowingResults(false)
+                        }}
+                      >
+                        <Text numberOfLines={1}>{item.description}</Text>
+                      </TouchableOpacity>
+                    )
+                  }}
+                  keyExtractor={item => item.id}
+                  style={styles.searchResultsContainer}
+                />
+              )}
+            </View>
+          </View>
+
+          <View style={styles.metaEditFieldContainer}>
+            <Text style={styles.metaEditFieldLabel}>Address: </Text>
+            <View style={styles.metaEditField}>
+              <Input
+                placeholder='Enter Address'
+                value={address}
+                onChangeText={text => setAddress(text)}
               />
             </View>
           </View>
@@ -195,16 +251,6 @@ function DestinationEditScreen (props) {
                 placeholder='Enter Trip Notes'
                 value={notes}
                 onChangeText={text => setNotes(text)}
-              />
-            </View>
-          </View>
-          <View style={styles.metaEditFieldContainer}>
-            <Text style={styles.metaEditFieldLabel}>Address: </Text>
-            <View style={styles.metaEditField}>
-              <Input
-                placeholder='Enter Address'
-                value={address}
-                onChangeText={text => setAddress(text)}
               />
             </View>
           </View>
