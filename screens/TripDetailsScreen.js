@@ -21,15 +21,17 @@ import {
   MaterialIcons
 } from '@expo/vector-icons'
 import SlidingUpPanel from 'rn-sliding-up-panel'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { 
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
+import {
   requestForegroundPermissionsAsync,
-  watchPositionAsync 
-} from 'expo-location';
+  watchPositionAsync
+} from 'expo-location'
+import MapViewDirections from 'react-native-maps-directions'
 import styles, { darkGrayscale, grayscale, secondaryColor } from '../Styles'
 import { addItem, updateItem, deleteItem, load } from '../data/Actions'
 import ItineraryListTabs from '../components/ItineraryListTabs'
 import { getAuthUser } from '../AuthManager'
+import { GOOGLE_API_KEY } from '../Secrets'
 
 function TripDetailsScreen (props) {
   const dispatch = useDispatch()
@@ -41,44 +43,47 @@ function TripDetailsScreen (props) {
     month: 'short',
     day: 'numeric'
   }
+  const initRegion =
+    item.itinerary.length > 0 &&
+    Object.keys(item.itinerary[0].destinations).length > 0
+      ? {
+          latitude: item.itinerary[0].destinations['1'].lat,
+          longitude: item.itinerary[0].destinations['1'].lng,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        }
+      : {
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        }
+
   const { height } = Dimensions.get('window')
   const [currItem, setCurrItem] = useState(item)
-  const [ location, setLocation ] = useState(null);
-  const [ permissionsGranted, setPermissionsGranted ] = useState(false);
-  const [ mapRegion, setMapRegion ] = useState(initRegion);
-
-  const initRegion = {
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  }
-
-  let unsubscribeFromLocation = null;
-  const subscribeToLocation = async () => {
-    let { status } = await requestForegroundPermissionsAsync();
-    setPermissionsGranted(status === 'granted');
-
-    if (unsubscribeFromLocation) {
-      unsubscribeFromLocation();
-    }
-    unsubscribeFromLocation = watchPositionAsync({}, location => {
-      console.log('received update:', location);
-      setLocation(location);
-      setMapRegion({
-        ...mapRegion,
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude
-      })
-    })
-  }
+  const [itineraryList, setIteneraryList] = useState([])
+  const [mapRegion, setMapRegion] = useState(initRegion)
 
   useEffect(() => {
     if (!trips[index]) {
       return
     }
     setCurrItem(trips[index])
-    subscribeToLocation()
+    il = []
+    trips[index].itinerary.forEach((day, idx) => {
+      il.push([])
+      for (const [key, value] of Object.entries(day.destinations)) {
+        il[idx].push({ latitude: value.lat, longitude: value.lng })
+      }
+    })
+    setIteneraryList(il)
+    if (il.length > 0 && il[0].length > 0) {
+      setMapRegion({
+        ...mapRegion,
+        latitude: il[0][0].latitude,
+        longitude: il[0][0].longitude
+      })
+    }
   }, [trips[index]])
 
   return (
@@ -88,23 +93,38 @@ function TripDetailsScreen (props) {
       </View>
       <View style={styles.tripSlidePanelContainer}>
         <View>
-          {/* <Text style={styles.paragraph}>
-            {permissionsGranted ?
-              location ?
-                `lat: ${location.coords.latitude} \n` + 
-                `lon: ${location.coords.longitude}`
-              :
-                "Waiting..."
-            :
-              "Location permission granted."
-            }
-          </Text> */}
-          <MapView 
-            style={styles.map} 
+          <MapView
+            style={styles.map}
             provider={PROVIDER_GOOGLE}
             region={mapRegion}
             showsUserLocation={true}
-          />
+          >
+            {itineraryList.map(day => {
+              if (day.length === 1) {
+                return <Marker coordinate={day[0]} />
+              }
+              if (day.length > 1) {
+                return day.map((des, idx) => {
+                  if (idx + 1 < day.length) {
+                    return (
+                      <>
+                        <MapViewDirections
+                          origin={des}
+                          destination={day[idx + 1]}
+                          apikey={GOOGLE_API_KEY}
+                          strokeWidth={4}
+                          strokeColor='red'
+                        />
+                        <Marker coordinate={des} />
+                      </>
+                    )
+                  } else {
+                    return <Marker coordinate={des} />
+                  }
+                })
+              }
+            })}
+          </MapView>
         </View>
         <SlidingUpPanel
           ref={c => (this._panel = c)}
@@ -127,7 +147,9 @@ function TripDetailsScreen (props) {
               </View>
               <View style={styles.tripDetailMetaInfoContainer}>
                 <View style={styles.tripDetailMetaInfoRow}>
-                  <Text style={styles.tripDetailTitleText}>{currItem.title}</Text>
+                  <Text style={styles.tripDetailTitleText}>
+                    {currItem.title}
+                  </Text>
                 </View>
                 <View style={styles.tripDetailMetaInfoRow}>
                   <Text
