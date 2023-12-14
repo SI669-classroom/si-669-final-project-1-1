@@ -39,6 +39,11 @@ function DestinationEditScreen (props) {
   const [title, setTitle] = useState(
     !destination ? '' : destination.destination
   )
+  const [placeId, setPlaceId] = useState(
+    !destination ? '' : destination.placeId
+  )
+  const [lat, setLat] = useState(!destination ? '' : destination.lat)
+  const [lng, setLng] = useState(!destination ? '' : destination.lng)
   const [duration, setDuration] = useState(
     !destination ? '0' : destination.duration
   )
@@ -60,6 +65,26 @@ function DestinationEditScreen (props) {
         console.log(response.data)
         setSearchResults(response.data.predictions)
         setIsShowingResults(true)
+      })
+      .catch(e => {
+        console.log(e.response)
+      })
+  }
+
+  const searchGeo = async item => {
+    setTitle(item.structured_formatting.main_text)
+    setPlaceId(item.place_id)
+    setIsShowingResults(false)
+    axios
+      .request({
+        method: 'post',
+        url: `https://maps.googleapis.com/maps/api/geocode/json?place_id=${item.place_id}&key=${GOOGLE_API_KEY}`
+      })
+      .then(response => {
+        console.log(response)
+        setLat(response.data.results[0].geometry.location.lat)
+        setLng(response.data.results[0].geometry.location.lng)
+        setAddress(response.data.results[0].formatted_address)
       })
       .catch(e => {
         console.log(e.response)
@@ -116,6 +141,9 @@ function DestinationEditScreen (props) {
       newDestinations[(pos + 1).toString()] = {
         address: address,
         destination: title,
+        placeId: placeId,
+        lat: lat,
+        lng: lng,
         duration: duration.toString(),
         notes: notes,
         startTime: item.itinerary[dateIdx].startTime,
@@ -143,6 +171,8 @@ function DestinationEditScreen (props) {
   const save = () => {
     if (title === '') {
       alert('Please set destination name.')
+    } else if (placeId === '') {
+      alert('Please set destination through the search box.')
     } else {
       if (destination) {
         dispatch(
@@ -155,6 +185,9 @@ function DestinationEditScreen (props) {
                   [destination.key]: {
                     address: address,
                     destination: title,
+                    placeId: placeId,
+                    lat: lat,
+                    lng: lng,
                     duration: duration.toString(),
                     notes: notes,
                     startTime: element.startTime,
@@ -206,11 +239,7 @@ function DestinationEditScreen (props) {
                     return (
                       <TouchableOpacity
                         style={styles.resultItem}
-                        onPress={() => {
-                          setTitle(item.structured_formatting.main_text)
-                          setAddress(item.structured_formatting.secondary_text)
-                          setIsShowingResults(false)
-                        }}
+                        onPress={() => searchGeo(item)}
                       >
                         <Text numberOfLines={1}>{item.description}</Text>
                       </TouchableOpacity>
