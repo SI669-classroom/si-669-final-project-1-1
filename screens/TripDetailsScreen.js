@@ -21,6 +21,11 @@ import {
   MaterialIcons
 } from '@expo/vector-icons'
 import SlidingUpPanel from 'rn-sliding-up-panel'
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { 
+  requestForegroundPermissionsAsync,
+  watchPositionAsync 
+} from 'expo-location';
 import styles, { darkGrayscale, grayscale, secondaryColor } from '../Styles'
 import { addItem, updateItem, deleteItem, load } from '../data/Actions'
 import ItineraryListTabs from '../components/ItineraryListTabs'
@@ -38,12 +43,42 @@ function TripDetailsScreen (props) {
   }
   const { height } = Dimensions.get('window')
   const [currItem, setCurrItem] = useState(item)
+  const [ location, setLocation ] = useState(null);
+  const [ permissionsGranted, setPermissionsGranted ] = useState(false);
+  const [ mapRegion, setMapRegion ] = useState(initRegion);
+
+  const initRegion = {
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  }
+
+  let unsubscribeFromLocation = null;
+  const subscribeToLocation = async () => {
+    let { status } = await requestForegroundPermissionsAsync();
+    setPermissionsGranted(status === 'granted');
+
+    if (unsubscribeFromLocation) {
+      unsubscribeFromLocation();
+    }
+    unsubscribeFromLocation = watchPositionAsync({}, location => {
+      console.log('received update:', location);
+      setLocation(location);
+      setMapRegion({
+        ...mapRegion,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude
+      })
+    })
+  }
 
   useEffect(() => {
     if (!trips[index]) {
       return
     }
     setCurrItem(trips[index])
+    subscribeToLocation()
   }, [trips[index]])
 
   return (
@@ -52,6 +87,25 @@ function TripDetailsScreen (props) {
         <Text style={styles.headerText}>Plan</Text>
       </View>
       <View style={styles.tripSlidePanelContainer}>
+        <View>
+          {/* <Text style={styles.paragraph}>
+            {permissionsGranted ?
+              location ?
+                `lat: ${location.coords.latitude} \n` + 
+                `lon: ${location.coords.longitude}`
+              :
+                "Waiting..."
+            :
+              "Location permission granted."
+            }
+          </Text> */}
+          <MapView 
+            style={styles.map} 
+            provider={PROVIDER_GOOGLE}
+            region={mapRegion}
+            showsUserLocation={true}
+          />
+        </View>
         <SlidingUpPanel
           ref={c => (this._panel = c)}
           draggableRange={{ top: height / 1.25, bottom: 120 }}

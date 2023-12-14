@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 
 export const primaryColor = '#ef8557'
 export const secondaryColor = '#293a47'
@@ -91,7 +91,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    width: 300
   },
   image: {
     flex: 1,
@@ -222,6 +223,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   // trip detail
+  map: {
+    width: Dimensions.get('window').width,
+    height: '100%'
+  },
   tripSlidePanelContainer: {
     width: '100%',
     flex: 0.9,
