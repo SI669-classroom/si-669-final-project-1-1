@@ -2,9 +2,11 @@ const ADD_ITEM = 'ADD_ITEM'
 const UPDATE_ITEM = 'UPDATE_ITEM'
 const DELETE_ITEM = 'DELETE_ITEM'
 const LOAD = 'LOAD'
+const ADD_USER = 'ADD_USER'
 
 const initialState = {
   trips: [],
+  users: []
 }
 
 const addItem = (state, item, key) => {
@@ -50,6 +52,18 @@ const load = (state, trips) => {
   }
 }
 
+const addUser = (state, user, key) => {
+  let { users } = state
+  let newUsers = users.concat({
+    ...user,
+    key: key
+  })
+  return {
+    ...state,
+    users: newUsers
+  }
+}
+
 function rootReducer (state = initialState, action) {
   const { type, payload } = action
   switch (type) {
@@ -61,6 +75,8 @@ function rootReducer (state = initialState, action) {
       return deleteItem(state, payload.key)
     case LOAD:
       return load(state, payload.newTrips)
+      case ADD_USER:
+        return addUser(state, payload.user, payload.key)
     default:
       return state
   }
@@ -72,4 +88,5 @@ export {
   UPDATE_ITEM,
   DELETE_ITEM,
   LOAD,
+  ADD_USER
 }

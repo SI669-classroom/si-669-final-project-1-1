@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { Button } from '@rneui/themed'
 
+import { useSelector, useDispatch } from 'react-redux'
 import styles, { primaryColor } from '../Styles'
-import { signIn, signUp } from '../AuthManager'
+import { getAuthUser, signIn, signUp } from '../AuthManager'
+import { addUser } from '../data/Actions'
 
 export default function LoginBox ({ navigation }) {
   const [email, setEmail] = useState('')

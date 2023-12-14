@@ -14,7 +14,7 @@ import {
 } from 'firebase/firestore'
 
 import { firebaseConfig } from '../Secrets'
-import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, LOAD } from './Reducer'
+import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, LOAD, ADD_USER } from './Reducer'
 import { manageFileDownload } from './Storage'
 import { getAuthUser } from '../AuthManager'
 
@@ -110,4 +110,20 @@ const load = currUid => {
   }
 }
 
-export { addItem, updateItem, deleteItem, load }
+const addUser = user => {
+  return async dispatch => {
+    const docRef = await addDoc(collection(db, 'UserMeta'), {
+      ...user
+    })
+    const id = docRef.id
+    dispatch({
+      type: ADD_USER,
+      payload: {
+        user: user,
+        key: id
+      }
+    })
+  }
+}
+
+export { addItem, updateItem, deleteItem, load, addUser }
