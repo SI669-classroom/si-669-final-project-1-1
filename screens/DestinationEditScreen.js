@@ -61,7 +61,6 @@ function DestinationEditScreen (props) {
         url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${GOOGLE_API_KEY}&input=${text}`
       })
       .then(response => {
-        console.log(response.data)
         setSearchResults(response.data.predictions)
         setIsShowingResults(true)
       })
@@ -80,7 +79,6 @@ function DestinationEditScreen (props) {
         url: `https://maps.googleapis.com/maps/api/geocode/json?place_id=${item.place_id}&key=${GOOGLE_API_KEY}`
       })
       .then(response => {
-        console.log(response)
         setLat(response.data.results[0].geometry.location.lat)
         setLng(response.data.results[0].geometry.location.lng)
         setAddress(response.data.results[0].formatted_address)

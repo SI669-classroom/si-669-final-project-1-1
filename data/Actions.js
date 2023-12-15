@@ -10,7 +10,8 @@ import {
   updateDoc,
   deleteDoc,
   query,
-  where
+  where,
+  or
 } from 'firebase/firestore'
 
 import { firebaseConfig } from '../Secrets'
@@ -78,36 +79,43 @@ const deleteItem = item => {
 const load = currUid => {
   return async dispatch => {
     let newTrips
-    if (currUid === '') {
-      newTrips = []
-    } else {
-      const q = query(
-        collection(db, 'TripsMeta'),
-        where('owner', '==', currUid)
-      )
-      let querySnapshotContacts = await getDocs(q)
-      newTrips = await Promise.all(
-        querySnapshotContacts.docs.map(async docSnap => {
-          let uri = await manageFileDownload(docSnap.data().cover)
-          return {
-            ...docSnap.data(),
-            key: docSnap.id,
-            uri: uri,
-            endDate: docSnap.data().endDate.toDate(),
-            startDate: docSnap.data().startDate.toDate(),
-            itinerary: docSnap.data().itinerary ? docSnap.data().itinerary : [],
-            packingList: docSnap.data().packingList
-              ? docSnap.data().packingList
-              : []
-          }
-        })
-      )
-    }
-    let allUsers = []
-    const q = query(collection(db, 'UserMeta'))
+    const q = query(collection(db, 'TripsMeta'))
     let querySnapshotContacts = await getDocs(q)
-    allUsers = await Promise.all(
+    newTrips = await Promise.all(
       querySnapshotContacts.docs.map(async docSnap => {
+        let uri = await manageFileDownload(docSnap.data().cover)
+        return {
+          ...docSnap.data(),
+          key: docSnap.id,
+          uri: uri,
+          endDate: docSnap.data().endDate.toDate(),
+          startDate: docSnap.data().startDate.toDate(),
+          itinerary: docSnap.data().itinerary ? docSnap.data().itinerary : [],
+          packingList: docSnap.data().packingList
+            ? docSnap.data().packingList
+            : []
+        }
+      })
+    )
+    newTrips = newTrips.filter(trip => {
+      let flag = false
+      if (trip.owner === currUid) {
+        flag = true
+        return flag
+      }
+      trip.peers && trip.peers.forEach(peer => {
+        if (peer === currUid) {
+          flag = true
+          return
+        }
+      })
+      return flag
+    })
+    let allUsers = []
+    const q2 = query(collection(db, 'UserMeta'))
+    let querySnapshotContacts2 = await getDocs(q2)
+    allUsers = await Promise.all(
+      querySnapshotContacts2.docs.map(async docSnap => {
         return {
           ...docSnap.data(),
           key: docSnap.id

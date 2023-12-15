@@ -100,15 +100,15 @@ function TripDetailsScreen (props) {
             region={mapRegion}
             showsUserLocation={true}
           >
-            {itineraryList.map(day => {
+            {itineraryList.map((day, i) => {
               if (day.length === 1) {
-                return <Marker coordinate={day[0]} />
+                return <Marker key={i} coordinate={day[0]} />
               }
               if (day.length > 1) {
                 return day.map((des, idx) => {
                   if (idx + 1 < day.length) {
                     return (
-                      <>
+                      <View key={i}>
                         <MapViewDirections
                           origin={des}
                           destination={day[idx + 1]}
@@ -117,10 +117,10 @@ function TripDetailsScreen (props) {
                           strokeColor='red'
                         />
                         <Marker coordinate={des} />
-                      </>
+                      </View>
                     )
                   } else {
-                    return <Marker coordinate={des} />
+                    return <Marker key={i} coordinate={des} />
                   }
                 })
               }

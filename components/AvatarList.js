@@ -53,7 +53,6 @@ function AvatarList (props) {
     let uid = ''
     users.forEach(user => {
       if (user.email === email) {
-        console.log(user)
         uid = user.uid
         return
       }
@@ -70,8 +69,9 @@ function AvatarList (props) {
         containerStyle={{ backgroundColor: secondaryColor, marginRight: 5 }}
       />
       {peers &&
-        peers.map(peer => (
+        peers.map((peer, idx) => (
           <Avatar
+            key={idx}
             size={32}
             rounded
             title={findNameById(peer)}
@@ -123,7 +123,6 @@ function AvatarList (props) {
             let newPeers = tripItem.peers
               ? [...tripItem.peers].concat(findIdByEmail(email))
               : [findIdByEmail(email)]
-            console.log(newPeers)
             updatePeers(newPeers)
             setEmail('')
             toggleOverlay()
