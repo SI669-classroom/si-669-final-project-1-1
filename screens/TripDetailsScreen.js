@@ -32,6 +32,7 @@ import { addItem, updateItem, deleteItem, load } from '../data/Actions'
 import ItineraryListTabs from '../components/ItineraryListTabs'
 import { getAuthUser } from '../AuthManager'
 import { GOOGLE_API_KEY } from '../Secrets'
+import AvatarList from '../components/AvatarList'
 
 function TripDetailsScreen (props) {
   const dispatch = useDispatch()
@@ -163,18 +164,7 @@ function TripDetailsScreen (props) {
                   )}`}</Text>
                 </View>
                 <View style={styles.tripDetailMetaInfoRow}>
-                  <View style={styles.avatarContainer}>
-                    <Avatar
-                      size={32}
-                      rounded
-                      icon={{
-                        name: 'add',
-                        type: 'MaterialIcons',
-                        color: secondaryColor
-                      }}
-                      containerStyle={{ backgroundColor: grayscale }}
-                    />
-                  </View>
+                  <AvatarList tripItem={currItem} showAdd={true} />
                 </View>
                 <View style={styles.tripDetailMetaInfoRow}>
                   <TouchableOpacity

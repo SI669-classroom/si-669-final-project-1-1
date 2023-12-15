@@ -14,6 +14,8 @@ import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
 import { useSelector, useDispatch } from 'react-redux'
 import styles, { grayscale, secondaryColor } from '../Styles'
 import { deleteItem } from '../data/Actions'
+import { getAuthUser } from '../AuthManager'
+import AvatarList from './AvatarList'
 
 function TripListItem (props) {
   const { item, index, navigation } = props
@@ -85,18 +87,7 @@ function TripListItem (props) {
           colors={['transparent', 'rgba(0,0,0,0.8)']}
           style={styles.tripMetaInfoContainer}
         >
-          <View style={styles.avatarContainer}>
-            <Avatar
-              size={32}
-              rounded
-              icon={{
-                name: 'add',
-                type: 'MaterialIcons',
-                color: secondaryColor
-              }}
-              containerStyle={{ backgroundColor: grayscale }}
-            />
-          </View>
+          <AvatarList tripItem={item} />
           <Text style={styles.tripMetaInfoTitle}>{item.title}</Text>
           <Text
             style={styles.tripMetaInfoDate}

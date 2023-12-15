@@ -45,10 +45,11 @@ const deleteItem = (state, itemId) => {
   }
 }
 
-const load = (state, trips) => {
+const load = (state, trips, users) => {
   return {
     ...state,
-    trips: [...trips]
+    trips: [...trips],
+    users: [...users]
   }
 }
 
@@ -74,7 +75,7 @@ function rootReducer (state = initialState, action) {
     case DELETE_ITEM:
       return deleteItem(state, payload.key)
     case LOAD:
-      return load(state, payload.newTrips)
+      return load(state, payload.newTrips, payload.allUsers)
       case ADD_USER:
         return addUser(state, payload.user, payload.key)
     default:

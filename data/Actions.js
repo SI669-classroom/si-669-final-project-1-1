@@ -96,15 +96,29 @@ const load = currUid => {
             endDate: docSnap.data().endDate.toDate(),
             startDate: docSnap.data().startDate.toDate(),
             itinerary: docSnap.data().itinerary ? docSnap.data().itinerary : [],
-            packingList: docSnap.data().packingList ? docSnap.data().packingList : []
+            packingList: docSnap.data().packingList
+              ? docSnap.data().packingList
+              : []
           }
         })
       )
     }
+    let allUsers = []
+    const q = query(collection(db, 'UserMeta'))
+    let querySnapshotContacts = await getDocs(q)
+    allUsers = await Promise.all(
+      querySnapshotContacts.docs.map(async docSnap => {
+        return {
+          ...docSnap.data(),
+          key: docSnap.id
+        }
+      })
+    )
     dispatch({
       type: LOAD,
       payload: {
-        newTrips: newTrips
+        newTrips: newTrips,
+        allUsers: allUsers
       }
     })
   }

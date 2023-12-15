@@ -124,7 +124,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white'
   },
-  avatarContainer: {},
+  avatarContainer: {
+    flexDirection: 'row',
+  },
   // TripMetaEdit
   metaEditContainer: {
     flex: 0.8,
